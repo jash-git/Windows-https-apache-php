@@ -1,0 +1,627 @@
+//ajax 開始
+//Examine the browser
+var userAgent = navigator.userAgent.toLowerCase();
+var is_opera  = (userAgent.indexOf('opera') != -1);
+var is_saf    = ((userAgent.indexOf('applewebkit') != -1) || (navigator.vendor == 'Apple Computer, Inc.'));
+var is_webtv  = (userAgent.indexOf('webtv') != -1);
+var is_ie     = ((userAgent.indexOf('msie') != -1) && (!is_opera) && (!is_saf) && (!is_webtv));
+var is_ie4    = ((is_ie) && (userAgent.indexOf('msie 4.') != -1));
+var is_moz    = ((navigator.product == 'Gecko') && (!is_saf));
+var is_kon    = (userAgent.indexOf('konqueror') != -1);
+var is_ns     = ((userAgent.indexOf('compatible') == -1) && (userAgent.indexOf('mozilla') != -1) && (!is_opera) && (!is_webtv) && (!is_saf));
+var is_ns4    = ((is_ns) && (parseInt(navigator.appVersion) == 4));
+var is_mac    = (userAgent.indexOf('mac') != -1);
+
+
+//Get absolute path, fix bug of IE when base path is set
+var gotourl = location.href;
+var absbaseurl;
+var r_identifier=gotourl.lastIndexOf("/archives/");
+if (r_identifier!=-1) {
+	absbaseurl = gotourl.substr(0, r_identifier)+"/";
+}
+else absbaseurl = '';
+
+function confirm_delete(){
+	if (confirm("刪除後不能恢復，真的要刪除嗎？")){
+		return true;
+	}
+	return false;
+}
+// Show/Hide Sidebar
+function showHideSidebar(){
+  try{
+    var objSidebar=document.getElementById("sidebar");
+    var objContent=document.getElementById("content");
+    if(objSidebar.className!="sidebar-hide"){
+      objSidebar.className="sidebar-hide";
+      objSidebar.style.display="none";
+      objContent.className="content-wide";
+	  document.getElementById('bar').innerHTML="顯示左側欄";
+    }else{
+      objSidebar.className="sidebar";
+      objSidebar.style.display="block";
+      objContent.className="content";
+	   document.getElementById('bar').innerHTML="隱藏左側欄";
+    }
+  }catch(e){}
+}
+//下面表單提交檢查
+var postSubmited = false;
+function ctlent(obj) {          //檢查輸入 
+	if(postSubmited == false && (event.ctrlKey && window.event.keyCode == 13) || (event.altKey && window.event.keyCode == 83)) {
+			if(this.document.input.topicsubmit) this.document.input.topicsubmit.disabled = true;
+			if(this.document.input.replysubmit) this.document.input.replysubmit.disabled = true;
+			if(this.document.input.editsubmit) this.document.input.editsubmit.disabled = true;
+			postSubmited = true;
+			this.document.input.submit();   //input為form的name
+	}
+}
+
+var flag=false; 
+function DrawImage(ImgD){ 
+	var image=new Image(); 
+	image.src=ImgD.src; 
+	if(image.width>0 && image.height>0){ 
+		flag=true; 
+		if(image.width>=500){ 
+			ImgD.width=500; 
+			ImgD.height=(image.height*500)/image.width; 
+		}else{ 
+			ImgD.width=image.width; 
+			ImgD.height=image.height; 
+		}  
+	} 
+} 
+/* 按分辨率來控制圖片
+function DrawImage(ImgD){ 
+        var iWidth = screen.width * 0.65;
+        var image=new Image(); 
+        image.src=ImgD.src; 
+        if(image.width>0 && image.height>0){ 
+                flag=true; 
+                if(image.width>=iWidth){ 
+                        ImgD.width=iWidth; 
+                        ImgD.height=(image.height*iWidth)/image.width; 
+                }else{ 
+                        ImgD.width=image.width; 
+                        ImgD.height=image.height; 
+                }  
+        } 
+} 
+*/
+function showIntro(objID)
+{
+	if (document.getElementById(objID).style.display == "none") {
+		document.getElementById(objID).style.display = "";
+	}else{
+		document.getElementById(objID).style.display = "none";
+	}
+}
+
+function winconfirm(confirmMSG,confirmURL){
+	question = confirm(confirmMSG);
+	if (question != "0"){
+		window.location=confirmURL;
+	}
+}
+
+function CopyText(obj) {
+	ie = (document.all)? true:false
+	if (ie){
+		var rng = document.body.createTextRange();
+		rng.moveToElementText(obj);
+		rng.scrollIntoView();
+		rng.select();
+		rng.execCommand("Copy");
+		rng.collapse(false);
+	}
+}
+
+//Media Link
+function playmedia(strID,strType,strURL,intWidth,intHeight) {
+	var objDiv=document.getElementById(strID);
+	if (!objDiv) return false;
+	if (objDiv.style.display!='none') {
+		objDiv.innerHTML='';
+		objDiv.style.display='none';
+	} else {
+		objDiv.innerHTML=makemedia(strType,strURL,intWidth,intHeight);
+		objDiv.style.display='block';
+	}
+}
+ 
+//Media Build
+function makemedia (strType,strURL,intWidth,intHeight) {
+	var strHtml;
+	//movieplayer.swf?file=http://player0.tudou.com/flv/003/126/170/3126170.flv
+	//var movieplayerPath=absbaseurl+"movieplayer.swf?file="+strURL;
+	var movieplayerPath=absbaseurl+"vcastr22.swf?vcastr_file="+strURL;
+	//alert(movieplayerPath);
+	switch(strType) {
+		case 'wmp':
+			strHtml="<span></span><object width='"+intWidth+"' height='"+intHeight+"' classid='CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e05'><param name='url' value='"+strURL+"'/><embed width='"+intWidth+"' height='"+intHeight+"' type='application/x-mplayer2' src='"+strURL+"'></embed></object>";
+			break;
+		case 'swf':
+			strHtml="<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' width='"+intWidth+"' height='"+intHeight+"'><param name='movie' value='"+strURL+"'/><param name='quality' value='high' /><embed src='"+strURL+"' quality='high' type='application/x-shockwave-flash' width='"+intWidth+"' height='"+intHeight+"'></embed></object>";
+			break;
+		case 'flv':
+			//strHtml="<object classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,24,0' width='"+intWidth+"' height='"+intHeight+"' id='fullscreen' align='middle'><param name='allowScriptAccess' value='sameDomain' /><param name='movie' value='"+movieplayerPath+"' /><param name='quality' value='high' /><param name='salign' value='tl' /><param name='bgcolor' value='#ffffff' /><embed src=='"+movieplayerPath+"'' quality='high' salign='tl' bgcolor='#ffffff' width='"+intWidth+"' height='"+intHeight+"' name='fullscreen' align='middle' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /></object>";//
+			strHtml='<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="'+intWidth+'" height="'+intHeight+'"><param name="movie" value="'+movieplayerPath+'"><param name="quality" value="high"><param name="allowFullScreen" value="true" /><embed src="'+movieplayerPath+'" allowFullScreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="'+intWidth+'" height="'+intHeight+'"></embed></object>';
+			break;
+		case 'rm':
+			strHtml="<object classid='clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA' height='"+intHeight+"' width='"+intWidth+"' viewastext><param name='_ExtentX' value='12726'><param name='_ExtentY' value='8520'><param name='AUTOSTART' value='0'><param name='SHUFFLE' value='0'><param name='PREFETCH' value='true'><param name='NOLABELS' value='0'><param name='CONTROLS' value='ImageWindow'><param name='CONSOLE' value='_master'><param name='LOOP' value='0'><param name='NUMLOOP' value='0'><param name='CENTER' value='0'><param name='MAINTAINASPECT' value='"+strURL+"'><param name='BACKGROUNDCOLOR' value='#000000'></object><br><object classid='clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA' height='32' id='Player' width='"+intWidth+"' VIEWASTEXT><param name='_ExtentX' value='18256'><param name='_ExtentY' value='794'><param name='AUTOSTART' value='-1'><param name='SHUFFLE' value='0'><param name='PREFETCH' value='0'><param name='NOLABELS' value='0'><param name='CONTROLS' value='controlpanel'><param name='CONSOLE' value='_master'><param name='LOOP' value='0'><param name='NUMLOOP' value='0'><param name='CENTER' value='0'><param name='MAINTAINASPECT' value='0'><param name='BACKGROUNDCOLOR' value='#000000'><param name='SRC' value='"+strURL+"'></object>";
+			break;
+		case 'mp3':
+			strHtml="<object width='400' height='65' classid='CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6'><param name='url' value='"+strURL+"'/><embed width='400' height='65' type='application/x-mplayer2' src='"+strURL+"'></embed></object>";
+			break;
+		case 'wma':
+			strHtml="<object width='400' height='65' classid='CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6'><param name='url' value='"+strURL+"'/><embed width='400' height='65' type='application/x-mplayer2' src='"+strURL+"'></embed></object>";
+			break;
+		case 'media':
+			strHtml="<object width='"+intWidth+"' height='"+intHeight+"' classid='CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6'><param name='url' value='"+strURL+"'/><embed width='"+intWidth+"' height='"+intHeight+"' type='application/x-mplayer2' src='"+strURL+"'></embed></object>";
+			break;
+		case "qt":
+				strHtml="<embed src='"+strURL+"' autoplay='true' Loop='false' controller='true' playeveryframe='false' cache='false' scale='TOFIT' bgcolor='#000000' kioskmode='false' targetcache='false' pluginspage='http://www.apple.com/quicktime/'>";
+				break;
+	}
+	return strHtml;
+}
+
+// Set Article Font Size
+function setFontSize(pt){
+  try{
+    var t=document.getElementById("textboxContent");
+    if(t){
+      t.style.fontSize=pt+"pt";
+    }
+  }catch(e){}
+}
+
+
+//Is Ajax supported?
+if ((is_ie & !is_ie4) || is_moz || is_saf || is_opera) var shutajax=0;
+else var shutajax=1;
+//For firefox, tell Firefox not to display the content you input in last session
+if (is_moz) {
+	var tmp_c=document.getElementById('content');
+	if (tmp_c) tmp_c.value='';
+}
+//encode string
+function blogencode (str) {
+	str=encodeURIComponent(str);
+	if (is_moz) str=str.replace(/%0A/g, "%0D%0A"); //In IE, a new line is encoded as \r\n, while in Mozilla it's \n
+	return str;
+}
+function ajax_submit (job) {
+	var enable_ubb = document.getElementById('enable_ubb').checked ? 1 : 0;
+	var enable_autourl = document.getElementById('enable_autourl').checked ? 1 : 0;
+	var hidden = document.getElementById('hidden').checked ? 1 : 0;
+	var username;
+	var password;
+	var logincheck="";
+	if (document.getElementById('username'))
+		username = document.getElementById('username').value+' ';
+	if (document.getElementById('password'))
+		password = document.getElementById('password').value;
+	if (document.getElementById('logincheck')){
+		if(document.getElementById('logincheck').checked)
+			logincheck=1;
+	}
+	var ip = document.getElementById('ip').value;
+	var content = document.getElementById('content').value+' ';
+	var blogid = document.getElementById('v_id').value;
+	var v_security_plus;
+	if (document.getElementById('verify')) {
+		var verify = document.getElementById('verify').value;
+		if (verify=='') {
+			alert("驗證碼沒有填");
+			return false;
+		}
+		v_security_plus="&verify="+verify;
+	} else {
+		v_security_plus='';
+	}
+	document.getElementById('replysubmit').value="正在提交,請稍候";
+	document.getElementById('replysubmit').disabled='disabled';
+	if (shutajax==0) { //Currently for IE, Safari, Mozilla and Opera
+		username = blogencode(username);
+		content = blogencode(content);
+		var postData = "username="+username+"&password="+password+"&logincheck="+logincheck+"&content="+content+"&blogid="+blogid+"&enable_ubb="+enable_ubb+"&enable_autourl="+enable_autourl+"&hidden="+hidden+"&ip="+ip+v_security_plus;
+		var gourl=absbaseurl+"index.php?do="+job;
+//alert(postData);
+		makeRequest(gourl, 'quickreply', 'POST', postData);
+	} else {
+		document.getElementById('input').submit();
+	}
+}
+
+var http_request = false;
+function makeRequest(url, functionName, httpType, sendData) {
+
+	http_request = false;
+	if (!httpType) httpType = "GET";
+
+	if (window.XMLHttpRequest) { // Non-IE...
+		http_request = new XMLHttpRequest();
+		if (http_request.overrideMimeType) {
+			http_request.overrideMimeType('text/plain');
+		}
+	} else if (window.ActiveXObject) { // IE
+		try {
+			http_request = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch (e) {
+			try {
+				http_request = new ActiveXObject("Microsoft.XMLHTTP");
+			} catch (e) {}
+		}
+	}
+
+	if (!http_request) {
+		alert('Cannot send an XMLHTTP request');
+		return false;
+	}
+
+	var changefunc="http_request.onreadystatechange = "+functionName;
+
+	eval (changefunc);
+	//http_request.onreadystatechange = alertContents;
+	http_request.open(httpType, url, true);
+	http_request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	http_request.send(sendData);
+}
+
+function getReturnedText () {
+	if (http_request.readyState == 4) {
+		if (http_request.status == 200) {
+			var messagereturn = http_request.responseText;
+			return messagereturn;
+		} else {
+			alert('There was a problem with the request.');
+		}
+	}
+}
+
+function quickreply () {
+	var new_addnew=document.getElementById('addnew');
+	var new_replysubmit=document.getElementById('replysubmit');
+	var new_vcontent=document.getElementById('content');
+
+	if (http_request.readyState == 4) {	
+		if (http_request.status == 200) {
+			var messagereturn = http_request.responseText;
+			if (messagereturn.indexOf("<ajax::error>")!=-1) {
+				messagereturn=messagereturn.replace("<ajax::error>", '');
+				new_replysubmit.value=" 發表留言 [可按 Ctrl+Enter 發佈]";
+				new_replysubmit.disabled='';
+				alert(messagereturn);
+			} else if (messagereturn.indexOf("<ajax::success>")!=-1) {
+				messagereturn=messagereturn.replace("<ajax::success>", '');
+				messagereturn=messagereturn.replace(/\\/g, '');
+
+				new_addnew.innerHTML=new_addnew.innerHTML+messagereturn;
+				new_replysubmit.value=" 發表留言 [可按 Ctrl+Enter 發佈]";
+				new_replysubmit.disabled='';
+				new_vcontent.value='';
+				if (gotourl.indexOf("#topreply")==-1) gotourl = gotourl+"#topreply";
+				window.location=gotourl;
+			}
+		}  else {
+			alert('There was a problem with the request.');
+		}
+	}
+}
+
+function delconfirm(job,repid) {
+	var urldel=absbaseurl+"admin/main.php?do="+job+"&id="+repid;
+	if(confirm("刪除後不能恢復，真的要刪除嗎？")){
+		if (shutajax==1) window.location=urldel;
+		else {
+			urldel+="&ajax=on";
+			currentid=repid;
+			makeRequest(urldel, 'quickdelreply', 'GET', null);
+		}
+	}
+	else {
+		return;
+	}
+}
+function quickdelreply() {
+	if (http_request.readyState == 4) {
+		if (http_request.status == 200) {
+			var messagereturn = http_request.responseText;
+			if (messagereturn.indexOf("<ajax::error>")!=-1) {
+				messagereturn=messagereturn.replace("<ajax::error>", '');
+				alert(messagereturn);
+			} else if (messagereturn.indexOf("<ajax::success>")!=-1) {
+				var rpid="list"+currentid;
+				document.getElementById(rpid).innerHTML='';
+				document.getElementById(rpid).style.display='none';
+			}
+		}  else {
+			alert('There was a problem with the request.');
+		}
+	}
+}
+//Admin reply
+function ajax_adminreply (commentid) {
+		var admid='adminreplycontent'+commentid;
+		var adminreplycontent = blogencode(document.getElementById(admid).value);
+		var postData = "do="+switchcomandmes+"&id="+commentid+"&content="+adminreplycontent;
+		var gourl=absbaseurl+"./admin/main.php?ajax=on";
+		currentid=commentid;
+		makeRequest(gourl, 'quickadminreply', 'POST', postData);
+}
+
+function quickadminreply() {
+	if (http_request.readyState == 4) {
+		if (http_request.status == 200) {
+			var messagereturn = http_request.responseText;
+			if (messagereturn.indexOf("<ajax::error>")!=-1) {
+				messagereturn=messagereturn.replace("<ajax::error>", '');
+				alert(messagereturn);
+			} else if (messagereturn.indexOf("<ajax::success>")!=-1) {
+				messagereturn=messagereturn.replace("<ajax::success>", '');
+				var newcomid="replied"+currentid;
+				if(messagereturn!="")
+				{
+					document.getElementById(newcomid).innerHTML=messagereturn;	
+				}else{
+					document.getElementById(newcomid).style.display='none';
+				}
+				document.getElementById("com_"+currentid).style.display='none';
+			}
+		}  else {
+			alert('There was a problem with the request.');
+		}
+	}
+}
+function showadminreply(type,divid) {
+	switchcomandmes=type;
+	var temp="";
+	var cleanid=divid.replace('com_', '');
+	if(document.getElementById("repliedcontent"+cleanid)){
+		temp=document.getElementById("repliedcontent"+cleanid).innerHTML;
+	}
+	var inputcontent="<form>";
+	inputcontent+="回復:<br/><textarea cols='66' rows='3' name='adminreplycontent' id='adminreplycontent"+cleanid+"'>"+temp+"</textarea><br/>";
+	inputcontent+="<input type='button' onclick=\"ajax_adminreply('"+cleanid+"'); return false;\" value='提交' class='button'/> <input type='reset' value='還原' class='button'/> <input type='button' value='取消'  onclick=\"showIntro('"+divid+"');\" class='button'/></form>";
+	document.getElementById(divid).innerHTML=inputcontent;
+	document.getElementById(divid).style.display='block';
+}
+//處理用戶登錄模塊 全局變量
+function ajaxReg_submit (job) {
+	var password = document.getElementById('password').value;
+	var confirmpsw=document.getElementById('confirmpsw').value;
+	if(job=="doreg")
+	{
+		var username = document.getElementById('username').value;
+		var user= /^([a-zA-Z]+[_0-9a-zA-Z@.-]*)$/;
+		if (username=="" || !username.match(user)){
+			alert("用戶名請用字母,數字和底線");return false;
+		}
+		username = blogencode(username);
+		if(password=="") {alert("密碼不能為空");return false;}
+	}
+	if(password!=confirmpsw) {alert("兩次密碼不相同");return false;}
+	var nickname = document.getElementById('nickname').value;
+	var email = document.getElementById('email').value;
+	var homepage = document.getElementById('homepage').value;
+	var qq = document.getElementById('qq').value;
+	var msn = document.getElementById('msn').value;
+	var intro = document.getElementById('intro').value;
+	//intro=intro.replace( /\n/g, '<BR>' ) ;
+	document.getElementById('submit').value="正在提交,請稍候";
+	document.getElementById('submit').disabled='disabled';
+	if (shutajax==0) { //Currently for IE, Safari, Mozilla and Opera
+		intro = blogencode(intro);
+		var gourl=absbaseurl+"index.php?do="+job;
+		if(job=="doreg")
+		{
+		var postData = "username="+username+"&password="+password+"&nickname="+nickname+"&email="+email+"&homepage="+homepage+"&qq="+qq+"&msn="+msn+"&intro="+intro;
+		
+		}else{
+			var userid = document.getElementById('userid').value;
+			var oldpwd = document.getElementById('oldpwd').value;
+			var postData = "id="+userid+"&oldpwd="+oldpwd+"&password="+password+"&nickname="+nickname+"&email="+email+"&homepage="+homepage+"&qq="+qq+"&msn="+msn+"&intro="+intro;
+		}
+	makeRequest(gourl, 'doreg', 'POST', postData);
+	} else {
+		document.getElementById('input').submit();
+	}
+}
+function ajaxLogin_submit (job) {
+	var password = document.getElementById('password_login').value;
+	var username=document.getElementById('username_login').value;
+		username = blogencode(username);
+	document.getElementById('loginsubmit').value="正在提交";
+	document.getElementById('loginsubmit').disabled='disabled';
+	if(document.getElementById('loginverify')){
+		loginverify=document.getElementById('loginverify').value;
+	}
+	if (shutajax==0) { //Currently for IE, Safari, Mozilla and Opera
+		var gourl=absbaseurl+"index.php?do="+job;
+		var postData = "username="+username+"&password="+password+"&loginverify="+loginverify;
+		makeRequest(gourl, 'dologin', 'POST', postData);
+	} else {
+		document.getElementById('loginform').submit();
+	}
+}
+function getAdminLabel () {
+		var postData = "";
+		var gourl=absbaseurl+"index.php?do=getLabel";
+		makeRequest(gourl, 'showLabel', 'POST', postData);
+}
+function showLabel() {
+	if (http_request.readyState == 4) {
+		if (http_request.status == 200) {
+			var messagereturn = http_request.responseText;
+				messagereturn=messagereturn.replace("<ajax::success>", '');
+				if(messagereturn!="")
+				{
+					document.getElementById("adminLabel").innerHTML='<a href="admin">用戶管理</a>';
+					//document.getElementById("adminLabel").style.display='none';
+					//showLogin();
+				}
+		}
+	}	
+}
+//function showLogin(){
+//	var postData = "";
+//	var gourl=absbaseurl+"index.php?do=showlogin";
+//	makeRequest(gourl, 'showLogininfo', 'POST', postData);
+//}
+function showLogininfo()
+{
+	var new_panelUser=document.getElementById('panelUser');
+	if (http_request.readyState == 4) {
+		if (http_request.status == 200) {
+			var messagereturn = http_request.responseText;
+				messagereturn=messagereturn.replace("<ajax::success>", '');
+				if(messagereturn!="")
+				{	
+					//alert(document.getElementById("panelUser").innerHTML);
+					new_panelUser.style.display='block';
+					new_panelUser.innerHTML=messagereturn;	
+				}
+		}
+	}	
+}
+
+function dologin () {
+	var new_submit=document.getElementById('loginsubmit');
+	if (http_request.readyState == 4) {	
+		if (http_request.status == 200) {
+			var messagereturn = http_request.responseText;
+			if (messagereturn.indexOf("<ajax::error>")!=-1) {
+				messagereturn=messagereturn.replace("<ajax::error>", '');
+				new_submit.value=" 提交登錄 ";
+				new_submit.disabled='';
+				alert(messagereturn);
+			} else if (messagereturn.indexOf("<ajax::success>")!=-1) {
+				messagereturn=messagereturn.replace("<ajax::success>", '');
+				messagereturn=messagereturn.replace(/\\/g, '');
+				
+				document.getElementById("adminLabel").style.display='none';
+				document.getElementById("panelUser").style.display='block';
+				document.getElementById("panelUser").innerHTML=messagereturn;
+			}
+		}  else {
+			alert('There was a problem with the request.');
+		}
+	}
+}
+function Logout(){
+	var postData = "";
+	var gourl=absbaseurl+"index.php?do=logout";
+	makeRequest(gourl, 'showLogoutinfo', 'POST', postData);
+}
+function showLogoutinfo()
+{
+	if (http_request.readyState == 4) {
+		if (http_request.status == 200) {
+			var messagereturn = http_request.responseText;
+				messagereturn=messagereturn.replace("<ajax::success>", '');
+				if(messagereturn!="")
+				{	
+					document.getElementById("adminLabel").style.display='block';
+					document.getElementById("panelUser").style.display='block';
+					document.getElementById("panelUser").innerHTML=messagereturn;	
+				}
+		}
+	}	
+}
+function showreg()
+{
+	var postData = "";
+	var gourl=absbaseurl+"index.php?do=reg";
+	makeRequest(gourl, 'showregform', 'POST', postData);	
+}
+function showregform()
+{
+	if (http_request.readyState == 4) {
+		if (http_request.status == 200) {
+			var messagereturn = http_request.responseText;
+				messagereturn=messagereturn.replace("<ajax::success>", '');
+				if(messagereturn!="")
+				{	
+					//alert(messagereturn);
+					//document.getElementById("innerContent").style.display='block';
+					document.getElementById("innerContent").innerHTML=messagereturn;	
+				}
+		}
+	}		
+}
+function showmodreg()
+{
+	var postData = "";
+	var gourl=absbaseurl+"index.php?do=modreg";
+	makeRequest(gourl, 'showregform', 'POST', postData);	
+}
+function doreg () {
+	//var new_addnew=document.getElementById('regdiv');
+	var new_submit=document.getElementById('submit');
+	if (http_request.readyState == 4) {	
+		if (http_request.status == 200) {
+			var messagereturn = http_request.responseText;
+			if (messagereturn.indexOf("<ajax::error>")!=-1) {
+				messagereturn=messagereturn.replace("<ajax::error>", '');
+				new_submit.value=" 提交登錄 ";
+				new_submit.disabled='';
+				alert(messagereturn);
+			} else if (messagereturn.indexOf("<ajax::success>")!=-1) {
+				messagereturn=messagereturn.replace("<ajax::success>", '');
+				messagereturn=messagereturn.replace(/\\/g, '');
+				showLogin();
+				document.getElementById("innerContent").innerHTML=messagereturn;
+				new_submit.value=" 提交登錄 ";
+				new_submit.disabled='';
+			}
+		}  else {
+			alert('There was a problem with the request.');
+		}
+	}
+}
+function showgblogin(){
+	var postData = "";
+	var gourl=absbaseurl+"index.php?do=showgblogin";
+	makeRequest(gourl, 'showgblogininfo', 'POST', postData);
+}
+function showgblogininfo()
+{
+	if (http_request.readyState == 4) {
+		if (http_request.status == 200) {
+				var messagereturn = http_request.responseText;
+				messagereturn=messagereturn.replace("<ajax::success>", '');
+				if(messagereturn!="")
+				{	
+					document.getElementById("showgblogindiv").innerHTML=messagereturn;	
+				}else{
+					document.getElementById("showgblogindiv").style.display="none";	
+				}
+		}
+	}		
+}
+function showuser(id){
+	var postData = "";
+	var gourl=absbaseurl+"index.php?do=userinfo&id="+id;
+	makeRequest(gourl, 'showuserinfo', 'POST', postData);
+}
+function showuserinfo()
+{
+	if (http_request.readyState == 4) {
+		if (http_request.status == 200) {
+				var messagereturn = http_request.responseText;
+				if (messagereturn.indexOf("<ajax::error>")!=-1) {
+					messagereturn=messagereturn.replace("<ajax::error>", '');
+					alert(messagereturn);
+				} else if (messagereturn.indexOf("<ajax::success>")!=-1) {
+					messagereturn=messagereturn.replace("<ajax::success>", '');
+					if(messagereturn!="")
+					{	
+						document.getElementById("innerContent").innerHTML=messagereturn;	
+					}
+				}
+		}
+	}		
+}

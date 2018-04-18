@@ -1,0 +1,673 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0051)http://neidi.homeip.net/blog/cblog/index.php?id=414 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="Author" content="coolsky,zhangjinhua04@163.com,coolsky@saysay.cn">
+<meta name="Robots" content="all">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<link rel="SHORTCUT ICON" href="http://neidi.homeip.net/files/favicon.ico">
+<link title="RSS" href="http://neidi.homeip.net/blog/cblog/rss.xml" type="application/rss+xml" rel="alternate">
+<title>Nei-DiのBlog-&gt;啟動 Windows 版 Apache 的 HTTPS (SSL) 功能</title>
+<style type="text/css">
+<!--
+   @import url("http://neidi.homeip.net/blog/cblog/templates/cloudy/style/10_styles.css");
+-->
+</style>
+ <script src="./01_files/cb=gapi.loaded_1" async=""></script><script src="./01_files/cb=gapi(1).loaded_0" async=""></script><script src="./01_files/ca-pub-8226967496893117.js.下載"></script><script id="facebook-jssdk" src="./01_files/sdk.js.下載"></script><script language="javascript" src="./01_files/common.js.下載" type="text/javascript"></script>
+<link rel="preload" href="./01_files/integrator.js.下載" as="script"><script type="text/javascript" src="./01_files/integrator.js.下載"></script><link rel="preload" href="./01_files/integrator.js(1).下載" as="script"><script type="text/javascript" src="./01_files/integrator.js(1).下載"></script><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}.fb_link img{border:none}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_reset .fb_dialog_legacy{overflow:visible}.fb_dialog_advanced{padding:10px;border-radius:8px}.fb_dialog_content{background:#fff;color:#333}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{top:5px;left:5px;right:auto}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_loader{background-color:#f6f7f9;border:1px solid #606060;font-size:25px;padding:20px}.fb_dialog_top_left,.fb_dialog_top_right,.fb_dialog_bottom_left,.fb_dialog_bottom_right{height:10px;width:10px;overflow:hidden;position:absolute}.fb_dialog_top_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 0;left:-10px;top:-10px}.fb_dialog_top_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -10px;right:-10px;top:-10px}.fb_dialog_bottom_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -20px;bottom:-10px;left:-10px}.fb_dialog_bottom_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -30px;right:-10px;bottom:-10px}.fb_dialog_vert_left,.fb_dialog_vert_right,.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{position:absolute;background:#525252;filter:alpha(opacity=70);opacity:.7}.fb_dialog_vert_left,.fb_dialog_vert_right{width:10px;height:100%}.fb_dialog_vert_left{margin-left:-10px}.fb_dialog_vert_right{right:0;margin-right:-10px}.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{width:100%;height:10px}.fb_dialog_horiz_top{margin-top:-10px}.fb_dialog_horiz_bottom{bottom:0;margin-bottom:-10px}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:15px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{-webkit-transform:none;height:100%;margin:0;overflow:visible;position:absolute;top:-10000px;left:0;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{width:auto;height:auto;min-height:initial;min-width:initial;background:none}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{color:#fff;display:block;padding-top:20px;clear:both;font-size:19px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .45);position:absolute;bottom:0;left:0;right:0;top:0;width:100%;min-height:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_content .dialog_header{-webkit-box-shadow:white 0 1px 1px -1px inset;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#738ABA), to(#2C4987));border-bottom:1px solid;border-color:#1d4088;color:#fff;font:14px Helvetica, sans-serif;font-weight:bold;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{-webkit-font-smoothing:subpixel-antialiased;height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:13px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:13px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#4966A6), color-stop(.5, #355492), to(#2A4887));border:1px solid #29487d;-webkit-background-clip:padding-box;-webkit-border-radius:3px;-webkit-box-shadow:rgba(0, 0, 0, .117188) 0 1px 1px inset, rgba(255, 255, 255, .167969) 0 1px 0;display:inline-block;margin-top:3px;max-width:85px;line-height:18px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{border:none;background:none;color:#fff;font:12px Helvetica, sans-serif;font-weight:bold;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:17px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #555;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f6f7f9;border:1px solid #555;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-repeat:no-repeat;background-position:50% 50%;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_hide_iframes iframe{position:relative;left:-10000px}.fb_iframe_widget_loader{position:relative;display:inline-block}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}.fb_iframe_widget_loader iframe{min-height:32px;z-index:2;zoom:1}.fb_iframe_widget_loader .FB_Loader{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat;height:32px;width:32px;margin-left:-16px;position:absolute;left:50%;z-index:4}
+.fb_customer_chat_bounce_in{animation-duration:250ms;animation-name:fb_bounce_in}.fb_customer_chat_bounce_out{animation-duration:250ms;animation-name:fb_fade_out}.fb_invisible_flow{display:inherit;height:0;overflow-x:hidden;width:0}.fb_mobile_overlay_active{background-color:#fff;height:100%;overflow:hidden;position:fixed;visibility:hidden;width:100%}@keyframes fb_fade_out{from{opacity:1}to{opacity:0}}@keyframes fb_bounce_in{0%{opacity:0;transform:scale(.8, .8);transform-origin:100% 100%}10%{opacity:.1}20%{opacity:.2}30%{opacity:.3}40%{opacity:.4}50%{opacity:.5}60%{opacity:.6}70%{opacity:.7}80%{opacity:.8;transform:scale(1.03, 1.03)}90{opacity:.9}100%{opacity:1;transform:scale(1, 1)}}</style></head>
+
+<body>
+<div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="fb_xdm_frame_http" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_http" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./01_files/FdM1l_dpErI.html" style="border: none;"></iframe><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./01_files/FdM1l_dpErI(1).html" style="border: none;"></iframe></div></div><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div></div></div></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div id="wrapper">
+<div id="innerWrapper">
+
+<div id="header">
+  <div id="innerHeader">
+  <div id="blogLogo">
+  <!--
+   <img src="http://neidi.homeip.net/blog/cblog/templates/cloudy/images/logo2.gif" id="logo" alt="Logo"/>
+   -->
+   </div>
+  <div class="blog-header">
+    <h1 class="blog-title"> <a href="http://neidi.homeip.net/blog/cblog">Nei-DiのBlog</a></h1>
+    <div class="blog-desc"></div>
+  </div>
+  <div id="menu">
+    <ul>
+    <li><a href="http://neidi.homeip.net/blog/cblog">首頁</a></li>
+    <li><a href="http://neidi.homeip.net/blog/cblog/admin/main.php?do=addblog&amp;isubb=1">新增日誌</a></li>
+	<li><a href="http://neidi.homeip.net/blog/cblog/album">相冊</a></li>
+    <li><a href="http://neidi.homeip.net/blog/cblog/rss.xml">RSS</a></li>
+    <li><a href="http://neidi.homeip.net/blog/cblog/index.php?do=tag">Tags</a></li>
+    <li><a href="http://neidi.homeip.net/blog/cblog/wap/index.php">wap瀏覽</a></li>
+    <li><a href="http://neidi.homeip.net/blog/cblog/index.php?do=guestbook">給我留言</a></li>
+    <li><a href="javascript:showHideSidebar()"><span id="bar">隱藏左側欄</span></a></li>
+    <li><span id="adminLabel"><a href="http://neidi.homeip.net/blog/cblog/admin">登入</a></span></li>
+    </ul>
+  </div>
+</div>
+</div>
+ <div id="mainWrapper">
+
+	<div id="maincontent" class="content">
+	<div id="innerContent">
+	  <div class="article-top">
+    <div class="prev-article"><a href="http://neidi.homeip.net/blog/cblog/index.php?id=131" title="SEEDNET真的開�...">«SEEDNET真的開始推IPv6了...</a></div>
+    <div class="next-article"></div>
+    <div class="category-label"><a href="http://neidi.homeip.net/blog/cblog/index.php?catid=9">分類: 網路相關</a></div>
+ </div>
+<div class="textbox">
+  <div class="textbox-title">
+   <h4>啟動 Windows 版 Apache 的 HTTPS (SSL) 功能</h4>
+      <div class="textbox-label">
+      [ 2014-07-02 03:33 | 作者: <a href="javascript:showuser(1)">Nei-Di</a> ]
+    </div>
+  </div>
+    <div class="textbox-fontsize">
+      字體:
+      <a href="javascript:setFontSize(14)" title="字體: 大">大</a> |
+      <a href="javascript:setFontSize(11)" title="字體: 中">中</a> |
+      <a href="javascript:setFontSize(9)" title="字體: 小">小</a>
+    </div>
+    <div id="textboxContent" class="textbox-content">
+    真的是好久沒在 Blog 中 PO 文了<img src="./01_files/154218d4.gif" alt="汗...">
+<br>剛好最近在嘗試開啟 Apache 的 HTTPS (SSL) 功能，所以就順手在 Blog 中做個紀錄~
+<br>
+<br>步驟大概分為下列
+<br><ol style="list-style-type:decimal;"><li>建立憑證</li><li>修改 Apache 的 httpd.conf 檔</li><li>修改 Apache 的 httpd-ssl.conf 檔</li></ol>
+<br>
+<br><font size="5&quot;">1. 建立憑證</font>
+<br>首先一開始即是需要建立憑證，大概需要下面幾個指令
+<br>
+<br><div class="code"><ol style="list-style-type:decimal;"><li>openssl genrsa -des3 -out server.key 2048</li><li>openssl req -new -key server.key -out server.csr</li><li>openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt</li><li>openssl rsa -in server.key.org -out server.key</li></ol></div>
+<br>
+<br>　　而 Windows 版 Apache 裡面通常附有 OpenSSL，以我的環境來說，在 Windows 7 下安裝好 Apache 之後，OpenSSL 預設路徑即為 Apache 安裝路徑底下的 bin 資料夾中的 openssl.exe，要做的就是透過內附的 OpenSSL 來產生憑證。
+<br>
+<br>　　另外由於 Apache 內附的 OpenSSL，其 config 檔案是另外放在 Apache 裡 conf 資料夾下的 openssl.cnf，因此在執行上面的指令時假如有出現找不到 config 檔案的話，需要在指令裡多加參數 -config "Apache 安裝路徑\conf\openssl.cnf"
+<br>
+<br>　　當然如果先將命令提示字元切換至 Apache 安裝路徑後再執行指令的話，就可以避免每次要載入 config 檔案都要打那一長串的 "Apache 安裝路徑"
+<br>
+<br>　　接著就是開啟 Windows 內建的命令提示字元，並切換到 Apache 的安裝路徑下
+<br>
+<br><a href="./01_files/20140702-1.png" title="看原大圖" target="_blank"><img src="./01_files/20140702-1.png" class="ubb_img" onload="javascript:DrawImage(this);" alt="看原大圖" width="500" height="325"></a>
+<br>
+<br>然後依序輸入指令
+<br>
+<br><font size="4&quot;"><span style="color:Red">openssl genrsa -des3 -out server.key 2048</span></font>
+<br><a href="./01_files/20140702-2.png" title="看原大圖" target="_blank"><img src="./01_files/20140702-2.png" class="ubb_img" onload="javascript:DrawImage(this);" alt="看原大圖" width="500" height="395"></a>
+<br>
+<br><font size="4&quot;"><span style="color:Red">openssl req -new -key server.key -out server.csr</span></font>
+<br><a href="./01_files/20140702-3.png" title="看原大圖" target="_blank"><img src="./01_files/20140702-3.png" class="ubb_img" onload="javascript:DrawImage(this);" alt="看原大圖" width="500" height="327"></a>
+<br>
+<br>輸入憑證相關資訊 , 如：Country Name=TW , State Name=Taiwan , Organization Name=neidi , Common Name=neidi.homeip.net (Hostname)，其他可以不用填
+<br>
+<br><a href="./01_files/20140702-4.png" title="看原大圖" target="_blank"><img src="./01_files/20140702-4.png" class="ubb_img" onload="javascript:DrawImage(this);" alt="看原大圖" width="500" height="326"></a>
+<br>
+<br><font size="4&quot;"><span style="color:Red">openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt</span></font>
+<br><a href="./01_files/20140702-5.png" title="看原大圖" target="_blank"><img src="./01_files/20140702-5.png" class="ubb_img" onload="javascript:DrawImage(this);" alt="看原大圖" width="500" height="328"></a>
+<br>
+<br><font size="4&quot;"><span style="color:Red">openssl rsa -in server.key.org -out server.key</span></font>
+<br>此步驟為移除私密金鑰中的密碼，而從私密金鑰中摘除密碼的原因是：Apache win32 版本不支援 Passphrase 的功能。
+<br>故先將原本的 server.key 改名為 server.key.org，再執行這個指令
+<br><a href="./01_files/20140702-6.png" title="看原大圖" target="_blank"><img src="./01_files/20140702-6.png" class="ubb_img" onload="javascript:DrawImage(this);" alt="看原大圖" width="500" height="328"></a>
+<br>
+<br>最後將上面產生的 server.key 跟 server.crt ，就直接擺到 "Apache 安裝路徑\conf" 即可（Apache預設的憑證放置位置）
+<br>
+<br><font size="5&quot;">2. 修改 Apache 的 httpd.conf 檔</font>
+<br>將 httpd.conf 中 "LoadModule ssl_module modules/mod_ssl.so" 前面的註解取消
+<br>接著將 "Include conf/extra/httpd-ssl.conf" 的註解也取消掉
+<br>
+<br><font size="5&quot;">3.修改 Apache 的 httpd-ssl.conf 檔</font>
+<br>將 "Apache 安裝路徑\conf\extra\httpd-ssl.conf 檔 "中的相關設定輸入
+<br>如
+<br><div class="code"><br>&lt;VirtualHost *:443&gt;
+<br>
+<br>DocumentRoot "C:/Apache2.2/htdocs"
+<br>ServerName neidi.homeip.net:443
+<br>ServerAdmin 
+<br>ErrorLog "logs/neidi.homeip.net_https-error.log"
+<br>TransferLog "logs/neidi.homeip.net_https-access.log"
+<br>
+<br>SSLEngine on
+<br>
+<br>SSLProtocol all -SSLv2
+<br>
+<br>SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5
+<br>
+<br>SSLCertificateFile "C:/Apache2.2/conf/server.crt"
+<br>
+<br>SSLCertificateKeyFile "C:/Apache2.2/conf/server.key"
+<br>
+<br>&lt;FilesMatch "\.(cgi|shtml|phtml|php)$"&gt;
+<br>    SSLOptions +StdEnvVars
+<br>&lt;/FilesMatch&gt;
+<br>&lt;Directory "C:/Apache2.2/cgi-bin"&gt;
+<br>    SSLOptions +StdEnvVars
+<br>&lt;/Directory&gt;
+<br>
+<br>BrowserMatch "MSIE [2-5]" \
+<br>         nokeepalive ssl-unclean-shutdown \
+<br>         downgrade-1.0 force-response-1.0
+<br>
+<br>CustomLog "C:/Apache2.2/logs/ssl_request.log" \
+<br>          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+<br>
+<br>&lt;/VirtualHost&gt;   </div>
+<br>
+<br>最後重新啟動 Apache 即可搞定囉！
+<br>
+<br>資料參考：
+<br><a href="http://blog.changyy.org/2009/05/windows-apache-with-https-ssl-windows-xp.html" target="_blank">[Windows] 安裝 Apache with HTTPS (SSL) 、建立憑證 @ Windows XP</a>
+<br><a href="http://chiangchingchi.pixnet.net/blog/post/44718239-apache-2.2.17-%E5%95%9F%E7%94%A8-ssl" target="_blank">Apache 2.2.17 啟用 SSL</a>
+	  	  <div class="editmark">
+		Tags:  <a href="http://neidi.homeip.net/blog/cblog/index.php?tag=apache" title="Tags︰apache" rel="tag">apache</a> , <a href="http://neidi.homeip.net/blog/cblog/index.php?tag=ssl" title="Tags︰ssl" rel="tag">ssl</a> , <a href="http://neidi.homeip.net/blog/cblog/index.php?tag=https" title="Tags︰https" rel="tag">https</a> 
+	  </div>
+	  	    <div class="editmark" style="text-align:right">
+	    <!-- 請將這組標籤置於 +1 按鈕該出現的位置。 -->
+			<div id="___plusone_0" style="text-indent: 0px; margin: 0px; padding: 0px; background: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 38px; height: 24px;"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position: static; top: 0px; width: 38px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 24px;" tabindex="0" vspace="0" width="100%" id="I0_1524028118454" name="I0_1524028118454" src="./01_files/fastbutton.html" data-gapiattached="true" title="G+"></iframe></div><div class="fb-like fb_iframe_widget" data-href="http://neidi.homeip.net/blog/cblog/index.php?id=414" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=like&amp;app_id=&amp;container_width=540&amp;href=http%3A%2F%2Fneidi.homeip.net%2Fblog%2Fcblog%2Findex.php%3Fid%3D414&amp;layout=button_count&amp;locale=zh_TW&amp;sdk=joey&amp;share=true&amp;show_faces=false"><span style="vertical-align: bottom; width: 90px; height: 20px;"><iframe name="feb47091f00e48" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" title="fb:like Facebook Social Plugin" src="./01_files/like.html" style="border: none; visibility: visible; width: 90px; height: 20px;" class=""></iframe></span></div><br>
+			[本日誌最後由1於2014-07-04 00:07編輯]</div>	  <div class="textbox-bottom">
+		<a href="http://neidi.homeip.net/blog/cblog/index.php?catid=9">分類: 網路相關</a> |
+		<a href="http://neidi.homeip.net/blog/cblog/index.php?id=414#remark">評論: 0</a> |
+		<a href="http://neidi.homeip.net/blog/cblog/index.php?id=414#trackback">引用: 0</a> |
+		閱讀: 5841 |	<a href="javascript: showIntro(&quot;admin414&quot;);">管理</a>
+	  </div>
+	  	  <div id="admin414" style="display: none;text-align:right">
+		  普通：<a href="http://neidi.homeip.net/blog/cblog/admin/main.php?do=editblog&amp;id=414">編輯</a> | <a href="http://neidi.homeip.net/blog/cblog/admin/main.php?do=delblog&amp;id=414" onclick="return confirm_delete();">刪除</a>  | <a href="http://neidi.homeip.net/blog/cblog/admin/main.php?do=settop&amp;id=414">置頂/取消</a> | <a href="http://neidi.homeip.net/blog/cblog/admin/main.php?do=buildone&amp;id=414">生成靜態</a> 
+	   </div>
+
+	   <div class="textbox-urls">
+		<span class="strong">引用通告地址:</span><br>
+		<span style="color:green;font-weight:bold;">GB2312 </span>http://neidi.homeip.net/blog/cblog/trackback.php?id=414&amp;code=gb2312<br>
+		<span style="color:green;font-weight:bold;"> UTF-8 </span>&nbsp;&nbsp;&nbsp;http://neidi.homeip.net/blog/cblog/trackback.php?id=414&amp;code=utf-8<br>
+		<span style="color:green;font-weight:bold;"> Big5  </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://neidi.homeip.net/blog/cblog/trackback.php?id=414&amp;code=big5
+	  </div>
+ </div>
+</div>
+<!--trackbacklist -->
+ <!--reply list -->
+ <div class="no-comment-box">暫時沒有評論,正等待您的添加.</div><br><a name="topreply"></a>
+<div id="addnew"></div>
+<div id="commentform">
+<script language="javascript" src="./01_files/bbcode.js.下載" type="text/javascript"></script>
+<form name="input" method="post" action="http://neidi.homeip.net/blog/cblog/index.php?do=newremark" onsubmit="return check()">	
+<table width="100%" border="0" align="center" cellpadding="4" cellspacing="1" class="formbox-comment">
+   <tbody><tr>
+   <td colspan="2" class="formbox-comment-title">發表評論</td>
+   </tr>
+   <tr>
+    <td class="formbox-comment-rowheader" width="140" valign="top">
+	<div style="text-align:left;font-weight:normal;"> </div><br>
+	<div class="panel-smilies">
+        <div class="panel-smilies-title">表情</div>
+        <div class="panel-smilies-content">
+		 		<a href="javascript:AddText(&#39;[smile]&#39;);"><img border="0" src="./01_files/smile.gif" alt="smile"></a>
+		  		 		<a href="javascript:AddText(&#39;[cool]&#39;);"><img border="0" src="./01_files/cool.gif" alt="cool"></a>
+		  		 		<a href="javascript:AddText(&#39;[lol]&#39;);"><img border="0" src="./01_files/lol.gif" alt="lol"></a>
+		  		 		<a href="javascript:AddText(&#39;[laugh]&#39;);"><img border="0" src="./01_files/laugh.gif" alt="laugh"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[sad]&#39;);"><img border="0" src="./01_files/sad.gif" alt="sad"></a>
+		  		 		<a href="javascript:AddText(&#39;[cry]&#39;);"><img border="0" src="./01_files/cry.gif" alt="cry"></a>
+		  		 		<a href="javascript:AddText(&#39;[playfull]&#39;);"><img border="0" src="./01_files/playfull.gif" alt="playfull"></a>
+		  		 		<a href="javascript:AddText(&#39;[sweat]&#39;);"><img border="0" src="./01_files/sweat.gif" alt="sweat"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[crazy]&#39;);"><img border="0" src="./01_files/crazy.gif" alt="crazy"></a>
+		  		 		<a href="javascript:AddText(&#39;[redface]&#39;);"><img border="0" src="./01_files/redface.gif" alt="redface"></a>
+		  		 		<a href="javascript:AddText(&#39;[what]&#39;);"><img border="0" src="./01_files/what.gif" alt="what"></a>
+		  		 		<a href="javascript:AddText(&#39;[shocked]&#39;);"><img border="0" src="./01_files/shocked.gif" alt="shocked"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[sex]&#39;);"><img border="0" src="./01_files/sex.gif" alt="sex"></a>
+		  		 		<a href="javascript:AddText(&#39;[heart]&#39;);"><img border="0" src="./01_files/heart.gif" alt="heart"></a>
+		  		 		<a href="javascript:AddText(&#39;[gift]&#39;);"><img border="0" src="./01_files/gift.gif" alt="gift"></a>
+		  		 		<a href="javascript:AddText(&#39;[rose]&#39;);"><img border="0" src="./01_files/rose.gif" alt="rose"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[ok]&#39;);"><img border="0" src="./01_files/ok.gif" alt="ok"></a>
+		  		 		<a href="javascript:AddText(&#39;[hand]&#39;);"><img border="0" src="./01_files/hand.gif" alt="shakehand"></a>
+		  		 		<a href="javascript:AddText(&#39;[yes]&#39;);"><img border="0" src="./01_files/yes.gif" alt="yes"></a>
+		  		 		<a href="javascript:AddText(&#39;[no]&#39;);"><img border="0" src="./01_files/no.gif" alt="no"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[1]&#39;);"><img border="0" src="./01_files/0eeeff42.gif" alt="瓊遙跪求"></a>
+		  		 		<a href="javascript:AddText(&#39;[2]&#39;);"><img border="0" src="./01_files/154218d4.gif" alt="汗..."></a>
+		  		 		<a href="javascript:AddText(&#39;[3]&#39;);"><img border="0" src="./01_files/54bd3bbb.gif" alt="XD"></a>
+		  		 		<a href="javascript:AddText(&#39;[4]&#39;);"><img border="0" src="./01_files/0fbbf481.gif" alt="臉紅紅"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[5]&#39;);"><img border="0" src="./01_files/3c68bb64.gif" alt="無言"></a>
+		  		 		<a href="javascript:AddText(&#39;[6]&#39;);"><img border="0" src="./01_files/3eb4e7b3.gif" alt="挖鼻孔"></a>
+		  		 		<a href="javascript:AddText(&#39;[7]&#39;);"><img border="0" src="./01_files/04a97f13.gif" alt="Bingo"></a>
+		  		 		<a href="javascript:AddText(&#39;[8]&#39;);"><img border="0" src="./01_files/4d6161fd.gif" alt="狂暴"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[9]&#39;);"><img border="0" src="./01_files/4e5dd44a.gif" alt="讚美主"></a>
+		  		 		<a href="javascript:AddText(&#39;[10]&#39;);"><img border="0" src="./01_files/4fd9f2d3.gif" alt="倒地"></a>
+		  		 		<a href="javascript:AddText(&#39;[11]&#39;);"><img border="0" src="./01_files/5a6157d0.gif" alt="石化"></a>
+		  		 		<a href="javascript:AddText(&#39;[12]&#39;);"><img border="0" src="./01_files/5c745924.gif" alt="頭暈目眩"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[13]&#39;);"><img border="0" src="./01_files/5e565bcb.gif" alt="感冒"></a>
+		  		 		<a href="javascript:AddText(&#39;[14]&#39;);"><img border="0" src="./01_files/6f428754.gif" alt="愛的轟炸"></a>
+		  		 		<a href="javascript:AddText(&#39;[15]&#39;);"><img border="0" src="./01_files/07baa27a.gif" alt="萬年奸臣"></a>
+		  		 		<a href="javascript:AddText(&#39;[16]&#39;);"><img border="0" src="./01_files/7f5341cc.gif" alt="無力感"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[17]&#39;);"><img border="0" src="./01_files/8dcf9699.gif" alt="翻桌"></a>
+		  		 		<a href="javascript:AddText(&#39;[18]&#39;);"><img border="0" src="./01_files/cd08785a.gif" alt="完美計劃"></a>
+		  		 		<a href="javascript:AddText(&#39;[19]&#39;);"><img border="0" src="./01_files/d582d79f.gif" alt="驚"></a>
+		  		 		<a href="javascript:AddText(&#39;[20]&#39;);"><img border="0" src="./01_files/d16c4689.gif" alt="水草舞"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[21]&#39;);"><img border="0" src="./01_files/17f0f3b0.gif" alt="淒涼"></a>
+		  		 		<a href="javascript:AddText(&#39;[22]&#39;);"><img border="0" src="./01_files/e111de78.gif" alt="OMG"></a>
+		  		 		<a href="javascript:AddText(&#39;[23]&#39;);"><img border="0" src="./01_files/8f337f1c.gif" alt="吃太飽"></a>
+		  		 		<a href="javascript:AddText(&#39;[24]&#39;);"><img border="0" src="./01_files/9a9e6a59.gif" alt="打瞌睡"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[25]&#39;);"><img border="0" src="./01_files/9bbc76d5.gif" alt="舉紅牌"></a>
+		  		 		<a href="javascript:AddText(&#39;[26]&#39;);"><img border="0" src="./01_files/20f27c58.gif" alt="射門"></a>
+		  		 		<a href="javascript:AddText(&#39;[27]&#39;);"><img border="0" src="./01_files/098eb4a5.gif" alt="無辜畫圈圈"></a>
+		  		 		<a href="javascript:AddText(&#39;[28]&#39;);"><img border="0" src="./01_files/96f0b971.gif" alt="推眼鏡"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[29]&#39;);"><img border="0" src="./01_files/87a4e689.gif" alt="舉黃牌"></a>
+		  		 		<a href="javascript:AddText(&#39;[30]&#39;);"><img border="0" src="./01_files/85b7147e.gif" alt="害羞扭扭"></a>
+		  		 		<a href="javascript:AddText(&#39;[31]&#39;);"><img border="0" src="./01_files/70bff581.gif" alt="爽"></a>
+		  		 		<a href="javascript:AddText(&#39;[32]&#39;);"><img border="0" src="./01_files/058e8b09.gif" alt="崩潰"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[33]&#39;);"><img border="0" src="./01_files/3070242c.gif" alt="失魂"></a>
+		  		 		<a href="javascript:AddText(&#39;[34]&#39;);"><img border="0" src="./01_files/33c4b951.gif" alt="Orz銅鈴眼"></a>
+		  		 		<a href="javascript:AddText(&#39;[35]&#39;);"><img border="0" src="./01_files/4412144b.gif" alt="笑裡藏刀"></a>
+		  		 		<a href="javascript:AddText(&#39;[36]&#39;);"><img border="0" src="./01_files/967339c1.gif" alt="掰掰"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[37]&#39;);"><img border="0" src="./01_files/875328cc.gif" alt="跪拜禮"></a>
+		  		 		<a href="javascript:AddText(&#39;[38]&#39;);"><img border="0" src="./01_files/6184ceba.gif" alt="我不依"></a>
+		  		 		<a href="javascript:AddText(&#39;[39]&#39;);"><img border="0" src="./01_files/1894c7a1.gif" alt="高處不勝寒"></a>
+		  		 		<a href="javascript:AddText(&#39;[40]&#39;);"><img border="0" src="./01_files/860e2a45.gif" alt="衝刺運球"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[41]&#39;);"><img border="0" src="./01_files/332f960b.gif" alt="鬼點子"></a>
+		  		 		<a href="javascript:AddText(&#39;[42]&#39;);"><img border="0" src="./01_files/215ad82f.gif" alt="怒火中燒"></a>
+		  		 		<a href="javascript:AddText(&#39;[43]&#39;);"><img border="0" src="./01_files/4519626a.gif" alt="昏"></a>
+		  		 		<a href="javascript:AddText(&#39;[44]&#39;);"><img border="0" src="./01_files/55318906.gif" alt="嘲笑"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[45]&#39;);"><img border="0" src="./01_files/a03cbf1e.gif" alt="苦惱的煙狂"></a>
+		  		 		<a href="javascript:AddText(&#39;[46]&#39;);"><img border="0" src="./01_files/ac0d5cff.gif" alt="漫不經心"></a>
+		  		 		<a href="javascript:AddText(&#39;[47]&#39;);"><img border="0" src="./01_files/af48944b.gif" alt="三八萌"></a>
+		  		 		<a href="javascript:AddText(&#39;[48]&#39;);"><img border="0" src="./01_files/b6b25dc6.gif" alt="泡澡"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[49]&#39;);"><img border="0" src="./01_files/b048a2d2.gif" alt="喔"></a>
+		  		 		<a href="javascript:AddText(&#39;[50]&#39;);"><img border="0" src="./01_files/74a6822a.gif" alt="呵呵呵呵"></a>
+		  		 		<a href="javascript:AddText(&#39;[51]&#39;);"><img border="0" src="./01_files/6e45ec9e.gif" alt="暴走族"></a>
+		  		 		<a href="javascript:AddText(&#39;[52]&#39;);"><img border="0" src="./01_files/ce3ec6c2.gif" alt="撞人"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[53]&#39;);"><img border="0" src="./01_files/1025c640.gif" alt="打飛1"></a>
+		  		 		<a href="javascript:AddText(&#39;[54]&#39;);"><img border="0" src="./01_files/45ed7b5f.gif" alt="打飛2"></a>
+		  		 		<a href="javascript:AddText(&#39;[55]&#39;);"><img border="0" src="./01_files/cd08785a.gif" alt="完美計劃"></a>
+		  		 		<a href="javascript:AddText(&#39;[56]&#39;);"><img border="0" src="./01_files/cf742eb3.gif" alt="沒什麼嘛"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[57]&#39;);"><img border="0" src="./01_files/fea27916.gif" alt="遠目"></a>
+		  		 		<a href="javascript:AddText(&#39;[58]&#39;);"><img border="0" src="./01_files/233cd70a.gif" alt="交出來"></a>
+		  		 		<a href="javascript:AddText(&#39;[59]&#39;);"><img border="0" src="./01_files/d5f02ecd.gif" alt="Good Job"></a>
+		  		 		<a href="javascript:AddText(&#39;[60]&#39;);"><img border="0" src="./01_files/afd371da.gif" alt="冷吱吱"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;[61]&#39;);"><img border="0" src="./01_files/f60952e1.gif" alt="淚奔"></a>
+		  		 		<a href="javascript:AddText(&#39;[62]&#39;);"><img border="0" src="./01_files/d79df121.gif" alt="吐"></a>
+		  		 		<a href="javascript:AddText(&#39;[63]&#39;);"><img border="0" src="./01_files/d33561e9.gif" alt="哭"></a>
+		  		 		<a href="javascript:AddText(&#39;[64]&#39;);"><img border="0" src="./01_files/da4c2d5e.gif" alt="好心情"></a>
+		  <br>		 		<a href="javascript:AddText(&#39;(LOL)&#39;);"><img border="0" src="./01_files/(lol).gif" alt="lol"></a>
+		  		 		<a href="javascript:AddText(&#39;(DANCE)&#39;);"><img border="0" src="./01_files/dance.gif" alt="dance"></a>
+		  		 		<a href="javascript:AddText(&#39;;-)&#39;);"><img border="0" src="./01_files/saved_resource" alt=";-)"></a>
+		  		  		</div>
+      </div>
+	  <div style="font-weight: normal; text-align:left;">
+        <input name="enable_ubb" id="enable_ubb" type="checkbox" value="1" checked="checked" class="nonebg"> 使用 UBB 代碼<br>
+        <input name="enable_autourl" id="enable_autourl" type="checkbox" value="1" checked="checked" class="nonebg"> 自動轉化URL<br>
+		<input name="hidden" id="hidden" type="checkbox" value="1" class="nonebg"> 隱藏 <br>
+      </div>	
+	  </td>	
+  <td class="formbox-comment-content" valign="top">
+	 <div style="padding-bottom:5px">
+	 <div id="showgblogindiv">用戶名: <input name="username" type="text" class="input" size="10" id="username" onfocus="this.value=&#39;&#39;;" value="guest"> 
+					 密碼: <input name="password" type="password" class="input" size="10" id="password" onfocus="this.value=&#39;&#39;;" value="">
+					 (guest無需密碼) <input name="logincheck" type="checkbox" value="1" class="nonebg">記住我</div><script language="javascript">showgblogin();</script><br>
+			<div>*請輸入驗證碼： <input id="verify" maxlength="10" size="8" name="verify">&nbsp;&nbsp;&nbsp;&nbsp;驗證碼為：&nbsp;<img src="./01_files/verify.php" border="1"></div><br> 					
+		<div>
+	 	<a href="javascript:bold()"><img height="24" alt="插入粗體文本" src="./01_files/bb_bold.gif" width="24" border="0"></a> 
+		<a href="javascript:italicize()"><img height="24" alt="插入斜體文本" src="./01_files/bb_italicize.gif" width="24" border="0"></a>
+		<a href="javascript:underline()"><img height="24" alt="插入下劃線" src="./01_files/bb_underline.gif" width="24" border="0"></a>
+		<a href="javascript:center()"><img height="24" alt="居中對齊" src="./01_files/bb_center.gif" width="24" border="0"></a>
+		<a href="javascript:hyperlink()"><img height="24" alt="插入超級鏈接" src="./01_files/bb_url.gif" width="24" border="0"></a>
+		<a href="javascript:email()"><img height="24" alt="插入郵件地址" src="./01_files/bb_email.gif" width="24" border="0"></a>
+		<a href="javascript:image()"><img height="24" alt="插入圖像" src="./01_files/bb_image.gif" width="24" border="0"></a>
+		<a href="javascript:addmedia(&#39;swf&#39;)"><img height="24" alt="插入 flash" src="./01_files/bb_flash.gif" width="24" border="0"></a> 
+		<a href="javascript:addmedia(&#39;wmp&#39;)"><img height="24" alt="插入Media player檔案，如MP3 WMA WMV ASF等" src="./01_files/bb_mp.gif" width="24" border="0"></a>
+		<a href="javascript:addmedia(&#39;rm&#39;)"><img height="24" alt="插入RealOne Player檔案，如rm等" src="./01_files/bb_rm.gif" width="24" border="0"></a> 
+		<a href="javascript:code()"><img height="24" alt="插入代碼" src="./01_files/bb_code.gif" width="24" border="0"></a> 
+		<a href="javascript:quote()"><img height="24" alt="插入引用" src="./01_files/bb_quote.gif" width="24" border="0"></a> 
+		<a href="javascript:list()"><img height="24" alt="插入列表" src="./01_files/bb_list.gif" width="24" border="0"></a> 
+	 </div>
+	 <textarea name="content" id="content" cols="15" rows="5" class="textarea" onselect="javascript: storeCaret(this);" onclick="javascript: storeCaret(this);" onkeydown="javascript: ctlent(&#39;newremark&#39;);" onkeyup="javascript: storeCaret(this);"></textarea>
+		<input name="v_id" type="hidden" id="v_id" value="414"><input name="ip" id="ip" type="hidden" value="110.50.165.16">
+		<input name="ischeck" type="hidden" id="ischeck" value="0">
+		<p><input name="replysubmit" type="submit" id="replysubmit" onclick="ajax_submit(&#39;newremark&#39;); return false;" value=" 發表評論 [可按 Ctrl+Enter 發佈]">&nbsp; 
+		  <input name="cancelsubmit" type="reset" value=" 清空內容 ">
+		</p>
+		</div></td>
+  </tr>
+</tbody></table>
+</form>
+</div>
+<script language="javascript" src="./01_files/count.php" type="text/javascript"></script>
+ 
+	</div>
+	</div>
+	<div id="sidebar" class="sidebar">  
+	<div id="innerSidebar">  
+	  <script language="javascript" type="text/javascript">
+var slideShowSpeed = 5000
+// Agent sniffer shamelessly 'stolen' from the excellent X library from cross-browser.com
+var xOp7=false,xOp5or6=false,xIE4Up=false,xNN4=false,xUA=navigator.userAgent.toLowerCase(); 
+if(window.opera){ 
+  xOp7=(xUA.indexOf('opera 7')!=-1 || xUA.indexOf('opera/7')!=-1); 
+  if (!xOp7) xOp5or6=(xUA.indexOf('opera 5')!=-1 || xUA.indexOf('opera/5')!=-1 || xUA.indexOf('opera 6')!=-1 || xUA.indexOf('opera/6')!=-1); 
+} 
+else if(document.layers) xNN4=true; 
+else {xIE4Up=document.all && xUA.indexOf('msie')!=-1 && parseInt(navigator.appVersion)>=4;}
+
+// Duration of crossfade (seconds)
+var crossFadeDuration = 3
+
+// Specify the image files
+var Pic = new Array() // don't touch this
+// to add more images, just continue
+// the pattern, adding to the array below
+Pic[0]='http://neidi.homeip.net/blog/cblog/album/uppicfile/s20090423_a151.jpg';
+
+var t
+var j = 0
+var p = Pic.length
+var pos = j
+
+var preLoad = new Array()
+
+function preLoadPic(index)
+{
+	if (Pic[index] != ''){
+		window.status='Loading : '+Pic[index]
+		preLoad[index] = new Image()
+		preLoad[index].src = Pic[index]
+		Pic[index] = ''
+		window.status=''
+	}
+}
+
+function runSlideShow(){
+   if (xIE4Up){
+    	document.images.SlideShow.style.filter="blendTrans(duration=2)"
+		document.images.SlideShow.style.filter= "blendTrans(duration=crossFadeDuration)"
+      document.images.SlideShow.filters.blendTrans.Apply()
+	}
+	document.images.SlideShow.src = preLoad[j].src
+	if (xIE4Up){
+	   document.images.SlideShow.filters.blendTrans.Play()
+	}
+	
+	pos = j
+
+	j = j + 1
+	if (j > (p-1)) j=0
+	t = setTimeout('runSlideShow()', slideShowSpeed)
+	preLoadPic(j)
+}
+preLoadPic(j)
+</script>
+ <!--登錄模塊-->	
+  <div id="panelUser" class="panel" style="display:none">
+
+  </div>
+ <!--about-->	
+  <div id="panelArticle" class="panel">
+     <h5 onclick="showIntro(&quot;sidebar_Article&quot;);"><span>關於我的</span></h5>
+	  <div class="panel-content" id="sidebar_Article">
+		 <img style="margin:5px;padding:3px;border:1px solid #888C78;" src="./01_files/s20090423_a151.jpg" width="148" name="SlideShow">
+		 <script language="javascript" type="text/javascript">runSlideShow()</script>
+	  </div>
+	</div>
+<!--日曆模塊-->
+  <div id="panelCalendar" class="panel">
+  <h5>站點日曆</h5>
+ 		  <div class="panel-content">
+<table cellspacing="1" class="calendar-table" style="background-image:url(http://neidi.homeip.net/blog/cblog/templates/cloudy/images/month04.gif)">
+ <tbody><tr>
+ 	<td class="calendar-top" colspan="7"><a href="http://neidi.homeip.net/blog/cblog/index.php?date=201704" class="calendar-arrow">«</a>&nbsp;<a href="http://neidi.homeip.net/blog/cblog/index.php?date=201804"><span class="calendar-year">2018</span></a>&nbsp;<a href="http://neidi.homeip.net/blog/cblog/index.php?date=201904" class="calendar-arrow">»</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://neidi.homeip.net/blog/cblog/index.php?date=201803" class="calendar-arrow">«</a>&nbsp;<a href="http://neidi.homeip.net/blog/cblog/index.php?date=201804"><span class="calendar-month">四月</span></a>&nbsp;<a href="http://neidi.homeip.net/blog/cblog/index.php?date=201805" class="calendar-arrow">»</a></td>
+ </tr>
+ <tr class="calendar-weekdays">
+	<td class="calendar-weekday-cell">Su</td>
+	<td class="calendar-weekday-cell">Mo</td>
+	<td class="calendar-weekday-cell">Tu</td>
+	<td class="calendar-weekday-cell">We</td>
+	<td class="calendar-weekday-cell">Th</td>
+	<td class="calendar-weekday-cell">Fr</td>
+	<td class="calendar-weekday-cell">Sa</td>
+ </tr><tr><td class="calendar-day">1</td><td class="calendar-day">2</td><td class="calendar-day">3</td><td class="calendar-day">4</td><td class="calendar-day">5</td><td class="calendar-day">6</td><td class="calendar-day">7</td></tr><tr><td class="calendar-day">8</td><td class="calendar-day">9</td><td class="calendar-day">10</td><td class="calendar-day">11</td><td class="calendar-day">12</td><td class="calendar-day">13</td><td class="calendar-day">14</td></tr><tr><td class="calendar-day">15</td><td class="calendar-day">16</td><td class="calendar-day">17</td><td class="calendar-today"><a href="http://neidi.homeip.net/blog/cblog/index.php?date=20180418" class="calendar-bloged">18</a></td><td class="calendar-day">19</td><td class="calendar-day">20</td><td class="calendar-day">21</td></tr><tr><td class="calendar-day">22</td><td class="calendar-day">23</td><td class="calendar-day">24</td><td class="calendar-day">25</td><td class="calendar-day">26</td><td class="calendar-day">27</td><td class="calendar-day">28</td></tr><tr><td class="calendar-day">29</td><td class="calendar-day">30</td><td class="calendar-day-blank"></td><td class="calendar-day-blank"></td><td class="calendar-day-blank"></td><td class="calendar-day-blank"></td><td class="calendar-day-blank"></td></tr></tbody></table></div>
+  </div>
+<!--分類模塊-->
+  <div id="panelCategory" class="panel">
+  <h5>日誌分類</h5>
+     <div class="panel-content">
+		<ul>
+					<li><a href="http://neidi.homeip.net/blog/cblog/index.php?catid=1">只是喇賽</a>  <span class="smalltime">[55]</span> <a href="http://neidi.homeip.net/blog/cblog/rss.php?catid=1"><img src="./01_files/rss.gif" height="15" alt="catrss" align="middle" border="0"></a></li>
+					<li><a href="http://neidi.homeip.net/blog/cblog/index.php?catid=3">Unix-like相關</a>  <span class="smalltime">[2]</span> <a href="http://neidi.homeip.net/blog/cblog/rss.php?catid=3"><img src="./01_files/rss.gif" height="15" alt="catrss" align="middle" border="0"></a></li>
+					<li><a href="http://neidi.homeip.net/blog/cblog/index.php?catid=8">Windows相關</a>  <span class="smalltime">[7]</span> <a href="http://neidi.homeip.net/blog/cblog/rss.php?catid=8"><img src="./01_files/rss.gif" height="15" alt="catrss" align="middle" border="0"></a></li>
+					<li><a href="http://neidi.homeip.net/blog/cblog/index.php?catid=11">資料庫相關</a>  <span class="smalltime">[3]</span> <a href="http://neidi.homeip.net/blog/cblog/rss.php?catid=11"><img src="./01_files/rss.gif" height="15" alt="catrss" align="middle" border="0"></a></li>
+					<li><a href="http://neidi.homeip.net/blog/cblog/index.php?catid=9">網路相關</a>  <span class="smalltime">[14]</span> <a href="http://neidi.homeip.net/blog/cblog/rss.php?catid=9"><img src="./01_files/rss.gif" height="15" alt="catrss" align="middle" border="0"></a></li>
+					<li><a href="http://neidi.homeip.net/blog/cblog/index.php?catid=10">IT界新知</a>  <span class="smalltime">[3]</span> <a href="http://neidi.homeip.net/blog/cblog/rss.php?catid=10"><img src="./01_files/rss.gif" height="15" alt="catrss" align="middle" border="0"></a></li>
+					<li><a href="http://neidi.homeip.net/blog/cblog/index.php?catid=6">專題</a>  <span class="smalltime">[3]</span> <a href="http://neidi.homeip.net/blog/cblog/rss.php?catid=6"><img src="./01_files/rss.gif" height="15" alt="catrss" align="middle" border="0"></a></li>
+					<li><a href="http://neidi.homeip.net/blog/cblog/index.php?catid=2">音響類</a>  <span class="smalltime">[9]</span> <a href="http://neidi.homeip.net/blog/cblog/rss.php?catid=2"><img src="./01_files/rss.gif" height="15" alt="catrss" align="middle" border="0"></a></li>
+					<li><a href="http://neidi.homeip.net/blog/cblog/index.php?catid=5">音樂類</a>  <span class="smalltime">[5]</span> <a href="http://neidi.homeip.net/blog/cblog/rss.php?catid=5"><img src="./01_files/rss.gif" height="15" alt="catrss" align="middle" border="0"></a></li>
+					<li><a href="http://neidi.homeip.net/blog/cblog/index.php?catid=7">歌詞翻譯轉載</a>  <span class="smalltime">[15]</span> <a href="http://neidi.homeip.net/blog/cblog/rss.php?catid=7"><img src="./01_files/rss.gif" height="15" alt="catrss" align="middle" border="0"></a></li>
+					<li><a href="http://neidi.homeip.net/blog/cblog/index.php?catid=4">動畫類</a>  <span class="smalltime">[4]</span> <a href="http://neidi.homeip.net/blog/cblog/rss.php?catid=4"><img src="./01_files/rss.gif" height="15" alt="catrss" align="middle" border="0"></a></li>
+					<li><a href="http://neidi.homeip.net/blog/cblog/index.php?catid=12">踩噗用動畫介紹</a>  <span class="smalltime">[273]</span> <a href="http://neidi.homeip.net/blog/cblog/rss.php?catid=12"><img src="./01_files/rss.gif" height="15" alt="catrss" align="middle" border="0"></a></li>
+				</ul>
+ 	 </div>
+  </div>
+ <!--站點統計模塊-->
+  <div id="panelStats" class="panel">
+  <h5>站點統計</h5>
+  <iframe align="top" frameborder="0" marginheight="0" marginwidth="6" height="16" width="150" scrolling="no" src="./01_files/onlinephp.html"></iframe><br>
+  <div class="panel-content">
+		   日誌總數:392<br>
+		   評論總數:33<br>
+		   引用總數:1<br>
+		   <a href="http://neidi.homeip.net/blog/cblog/index.php?do=tag" target="_blank">標籤總數:35</a><br>
+		   <a href="http://neidi.homeip.net/blog/cblog/index.php?do=guestbook" target="_blank">留言總數:11</a><br>
+		   <a href="http://neidi.homeip.net/blog/cblog/index.php?do=userlist" target="_blank">註冊用戶:<span id="usercount"></span></a><br>
+		   <a href="http://neidi.homeip.net/blog/cblog/admin/main.php?do=blogvisit" target="_blank">總訪問量:<span id="totalvisit"></span></a><br>
+		   總到訪IP量:<span id="totalvisit_ip"></span><br>
+		   <a href="http://neidi.homeip.net/blog/cblog/admin/main.php?do=blogvisit" target="_blank">今日訪問:<span id="todayvisit"></span></a><br>
+		   <a href="http://neidi.homeip.net/blog/cblog/admin/main.php?do=blogvisit" target="_blank">到訪IP量:<span id="todayvisit_ip"></span></a><br>
+		   建站日期:2005-11-11
+		   <script language="javascript" type="text/javascript" src="./01_files/count(1).php"> </script>
+		   <table cellpadding="1" cellspacing="1" style="border: 1px solid #8c8e7b; line-height:10px;background: white none repeat scroll 0%; font-family: Tahoma,Verdana; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial;">
+              <tbody>
+                <tr>
+                  <td style="background: #ff6500 none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 7pt; color: white;">&nbsp;XML&nbsp;</td>
+                  <td style="background: #8c8e7b none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 7pt;">&nbsp;<a href="http://neidi.homeip.net/blog/cblog/rss.xml" target="_blank" title="訂閱本站最新日誌"><span style="color:#ffffff">RSS 2.0</span></a>&nbsp;</td>
+                  <td style="background: #8c8e7b none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 7pt;">&nbsp;<a href="http://neidi.homeip.net/blog/cblog/wap/" target="_blank" title="通過手機訪問本站"><span style="color:#ffffff">WAP</span></a>&nbsp;</td>
+                </tr>
+              </tbody>
+	    </table>
+	    <img src="./01_files/QR_Code_Url.png" alt="QR Code" border="0" width="160" height="160"><br>
+	    <a href="http://info.flagcounter.com/9NfC"><img src="./01_files/saved_resource(1)" alt="Free counters!" border="0"></a><br>
+ 		</div>
+	</div>
+  <!--音樂播放模塊	
+  <div id="panelmusic" class="panel">
+     <h5>音樂播放器</h5>
+ 	 <div class="panel-content">
+		<embed src='http://www.shoutcast.com/media/popupPlayer_V19.swf?stationid=http://yp.shoutcast.com/sbin/tunein-station.pls?id=237756&play_status=0' quality='high' bgcolor='#ffffff' width='160' height='42' name='popupPlayer_V19' align='middle' allowScriptAccess='always' allowFullScreen='true' type='application/x-shockwave-flash' pluginspage='http://www.adobe.com/go/getflashplayer' ></embed>
+	</div>
+  </div>-->
+ <!--其他資訊模塊-->		
+  <div id="panelother" class="panel">
+     <h5>其他資訊</h5>
+ 	 <div class="panel-content">
+	 	<!-- <a href="javascript:showreg();">註冊</a><br/> -->
+	 	<a href="http://neidi.homeip.net/blog/cblog/index.php?do=applylink">申請鏈接</a><br>
+		<a href="http://jigsaw.w3.org/css-validator/validator?uri=http://neidi.homeip.net/blog/cblog">CSS 2.0</a><br>
+		<a href="http://validator.w3.org/check?uri=http://neidi.homeip.net/blog/cblog">XHTML 1.0</a><br>
+		<a href="http://www.miibeian.gov.cn/" target="_blank"></a><br>
+		<a href="http://nofue.fc2web.com/union/index.htm" target="_blank"><img src="./01_files/maina.gif" alt="怠惰管理者同盟" border="0" width="50" height="50"></a> <br>
+		<a href="http://sdkfz251.blogspot.com/2007/03/embarrassed.html" target="_blank"><img src="./01_files/8015-7.gif" alt="尷尬網誌寫作者互助協會" border="0" width="80" height="15"></a> <br>
+		<a href="http://sdkfz251.blogspot.com/2007/05/emba_11.html" target="_blank"><img src="./01_files/embasmm.gif" alt="貧窮部落客" border="0" width="100" height="17"></a> <br>
+		<a href="http://tcn-97375541376.spampoison.com/"><img src="./01_files/sticker.gif" border="0" width="80" height="15"></a><br>
+		<a href="http://blog.ericsk.org/archives/357" target="_blank"><img src="./01_files/noautoplay.png" alt="我不喜歡自動播放" border="0"></a> <br>
+		<a href="http://sdkfz251.blogspot.com/2006/10/fuac.html" target="_blank"><img src="./01_files/stick_M_tc.png" alt="自動播放對策委員會" border="0"></a> <br>
+		<!-- <a href="http://stickeraction.com/NationalOtakuphic/go" target="_blank"><img src='http://stickeraction.com/NationalOtakuphic/sticker' alt='國家宅宅頻道'></a><BR> -->
+		<!-- <script type="text/javascript" language="JavaScript" src="http://look.urs.tw/java/s4.php?BlogID=17814"></script></a><br/> -->
+		<!-- <a href="http://stickeraction.com/MelamineFree/go" target="_blank"><img src='http://stickeraction.com/MelamineFree/sticker' alt='本部落格100%不含三聚氰胺'></a><br> -->
+		<!-- <script type="text/javascript" language="JavaScript" src="http://blog.chonpin.idv.tw/archives/js/boycott_wretch_1.js"></script><br/> -->
+		
+		<!-- <a href="http://www.animaid.net/fatechro/" target="_blank"><img border="0" src="http://www.animaid.net/fatechro/pic/150x240.jpg" width="150" height="240" alt="Fate Chronicle 運命編年史推廣網頁"></a><br/> -->
+		<!-- <div style="width:160px; height:375px;"><iframe src="http://www.plurk.com/getWidget?uid=3884504&amp;h=375&amp;w=160&amp;u_info=1&amp;bg=E2E0DE&tl=FAF8F5" width="160" frameborder="0" height="375" scrolling="no"></iframe><div style="float: right; padding: 1px;"> <a href="http://plurk.com/" target="_blank" style="font-size: 10px !important; color: #999 !important; border: none; text-decorate: none;" title="Plurk - A Social Journal for your life">Plurk.com</a></div></div> -->
+	</div>
+  </div>
+ <!--站點search模塊-->
+  <div id="panelSearch" class="panel">
+  <h5>日誌搜尋</h5>
+  <div class="panel-content">
+		<form name="form1" method="get" action="http://neidi.homeip.net/blog/cblog/index.php">   
+		<input type="hidden" name="do" value="search">
+		<input name="keyword" type="text" id="keyword" class="searchin" size="10" onfocus="this.value=&#39;&#39;;" value="多關鍵字請用空格分開"> 
+        <input type="submit" value="Go"> <br>
+		<input class="nonebg" style="width: 14px; height: 14px" type="radio" checked="checked" value="title" name="sel">&nbsp;標題
+	    <input class="nonebg" style="width: 14px; height: 14px" type="radio" value="content" name="sel">&nbsp;內容
+	    </form>
+		</div>
+	</div>
+ <!--最新日誌模塊-->	
+  <div id="panelArticle" class="panel">
+     <h5>最新日誌</h5>
+	  <div class="panel-content">
+			<ul>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=414" target="_blank">啟動 Windows 版 Apac...</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=413" target="_blank">頭文字D First Stage</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=412" target="_blank">Xenosaga THE ANIMATION</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=411" target="_blank">浦安鉄筋家族</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=410" target="_blank">神風怪盗ジャンヌ</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=409" target="_blank">[轉載]《イドへ至�...</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=408" target="_blank">[轉載]《Märchen》�...</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=407" target="_blank">新世紀GPXサイバ�...</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=406" target="_blank">新世紀GPXサイバ�...</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=405" target="_blank">新世紀GPXサイバ�...</a></li>
+						</ul>
+		</div>
+	</div>
+ <!--最新評論模塊-->	
+  <div id="panelremark" class="panel">
+     <h5>最新評論</h5>
+	  <div class="panel-content">
+		    <ul>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=38#remark63" target="_blank">http://www.plurk.com/p/...</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=39#remark62" target="_blank">[10]</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=43#remark61" target="_blank">大大，請問有全平...</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=130#remark60" target="_blank">您好
+最近也碰上...</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=107#remark59" target="_blank">我的 vista 在 Aspire...</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=110#remark58" target="_blank">請問我可以詢問
+...</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=126#remark57" target="_blank">[gift][gift][cry][hand]...</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=122#remark56" target="_blank">對我們這些常用�...</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=122#remark55" target="_blank">您好，打擾了。
+...</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/index.php?id=123#remark54" target="_blank">⑥：這一句的語�...</a></li>
+						</ul>
+		</div>
+	</div>
+ <!--友情鏈接模塊-->	
+  <div id="panellink" class="panel">
+     <h5>友情鏈接</h5>
+	 <div class="panel-content">
+		            <a href="https://www.google.com/adsense/home" target="_blank"><img src="./01_files/google_sm.gif" alt="Google AdSense" border="0"></a> <br>
+		            <a href="http://mail.google.com/mail?hl=zh-TW" target="_blank"><img src="./01_files/gmail_logo.gif" alt="Gmail" border="0"></a> <br>
+		            <a href="https://www.google.com/analytics/home/?hl=zh-TW" target="_blank"><img src="./01_files/Google Analytics_logo.gif" alt="Google Analytics" border="0"></a> <br>
+		            <a href="https://www.apachelounge.com/" target="_blank"><img src="./01_files/Apache Lounge.JPG" alt="Apache Lounge" border="0"></a> <br>
+		            <a href="http://www.pczone.com.tw/" target="_blank"><img src="./01_files/pczone_88_31.gif" alt="PCZONE" border="0"></a> <br>
+		            <a href="http://www.pcdvd.com.tw/" target="_blank"><img src="./01_files/pcdvd_logo.gif" alt="PCDVD數位科技討論區" border="0"></a> <br>
+		            <a href="http://forums.dearhoney.idv.tw/" target="_blank"><img src="./01_files/dh_title.jpg" alt="DearHoney 數位音樂工作室" border="0"></a> <br>
+		            <a href="http://www.andaudio.com/" target="_blank"><img src="./01_files/andaudio.jpg" alt="AndAudio.com" border="0"></a> <br>
+		            <a href="http://bbs.dmhy.org/" target="_blank"><img src="./01_files/dmhy_bbs_www.dmhy.net.gif" alt="動漫花園" border="0"></a> <br>
+		            <a href="http://share.dmhy.org/" target="_blank"><img src="./01_files/dmhyshare.gif" alt="動漫花園資源網" border="0"></a> <br>
+		            <a href="http://popgo.net/bbs/index.php" target="_blank"><img src="./01_files/Manyou-logo.gif" alt="『漫遊』酷論壇" border="0"></a> <br>
+		            <a href="http://www.flsnow.net/" target="_blank"><img src="./01_files/FLsnow_banner.gif" alt="雪舞清盈" border="0"></a> <br>
+		            <a href="http://www.ixpanel.com/" target="_blank"><img src="./01_files/ix_logo.jpg" alt="創市際市場研究顧問" border="0"></a> <br>
+		   			<ul>
+							<li><a href="http://learn-house.idv.tw/" target="_blank" title="">LearnHouse</a></li>
+							<li><a href="http://neidi.homeip.net/blog/cblog/admin/main.php?do=mbm5" target="_blank" title="">掛網機硬體狀態</a></li>
+							<li><a href="http://neidi.homeip.net/UAO/converter.html" target="_blank" title="">外字相容轉換器</a></li>
+						</ul>
+ 	  </div>
+	</div>
+   <!--Google AD-->
+   <div id="panellink" class="panel">
+     <h5>Google 廣告</h5>
+	 <div class="panel-content">
+	 	<!-- Search Google -->
+			<form method="get" action="http://www.google.com.tw/custom" target="google_window">
+			<table bgcolor="#cccccc">
+			<tbody><tr><td nowrap="nowrap" valign="top" align="left" height="32">
+				<a href="http://www.google.com/">
+				<img src="./01_files/Logo_25gry.gif" border="0" alt="Google" align="middle"></a>
+			<br>
+			<label for="sbi" style="display: none">輸入您的搜尋字詞</label>
+				<input type="text" name="q" size="12" maxlength="255" value="" id="sbi">
+			<label for="sbb" style="display: none">提交搜尋表單</label>
+				<input type="submit" name="sa" value="搜尋" id="sbb">
+				<input type="hidden" name="client" value="pub-8226967496893117">
+				<input type="hidden" name="forid" value="1">
+				<input type="hidden" name="ie" value="UTF-8">
+				<input type="hidden" name="oe" value="UTF-8">
+				<input type="hidden" name="cof" value="GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1">
+				<input type="hidden" name="hl" value="zh-TW">
+				</td></tr></tbody></table>
+			</form>
+		<embed src="http://www.ixpanel.com/140x210.swf?clickTAG=http://www.ixpanel.com/member_add.jsp?cf=WppY06&amp;ml=Y&amp;mld=protoss0809" width="140" height="210" quality="High" wmode="transparent">
+		<script type="text/javascript"><!--
+			google_ad_client = "pub-8226967496893117";
+			//
+			google_ad_slot = "4808913171";
+			google_ad_width = 120;
+			google_ad_height = 240;
+			//--></script>
+		<script type="text/javascript" src="./01_files/show_ads.js.下載">
+		</script><ins id="aswift_0_expand" style="display:inline-table;border:none;height:240px;margin:0;padding:0;position:relative;visibility:visible;width:120px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:240px;margin:0;padding:0;position:relative;visibility:visible;width:120px;background-color:transparent;"><iframe width="120" height="240" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;width:120px;height:240px;" src="./01_files/saved_resource.html"></iframe></ins></ins>
+ 	  </div>
+	</div>
+	</div>
+	</div>
+</div>
+<div class="clear"></div>
+<div id="footer">
+<div id="innerFooter">
+	Powered by <a href="http://www.saysay.cn/" target="_blank">C-Blog version 2.6 </a> © 2005-2006,Style Designed by Yonsm
+	<br>7 DB Queries | Proccessed in 0.056 second(s), Gzip enabled	<!--Google 分析-->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./01_files/ga.js.下載" type="text/javascript"></script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1845923-1");
+pageTracker._trackPageview();
+} catch(err) {}
+</script>
+
+<!--SNAP-->
+<script type="text/javascript" src="http://shots.snap.com/snap_shots.js?ap=1&amp;key=f311547532a9497f3312a99003dc935b&amp;sb=0&amp;th=ice&amp;cl=1&amp;si=0&amp;po=0&amp;df=0&amp;oi=0&amp;link_icon=on&amp;shots_trigger=both%E2%8C%A9=zh-tw&amp;domain=neidi.homeip.net">
+</script>
+
+<!--Google AD-->
+<script type="text/javascript"><!--
+google_ad_client = "pub-8226967496893117";
+//
+google_ad_slot = "0464182819";
+google_ad_width = 728;
+google_ad_height = 90;
+//--></script>
+<script type="text/javascript" src="./01_files/show_ads.js.下載">
+</script><ins id="aswift_1_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><iframe width="728" height="90" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;width:728px;height:90px;" src="./01_files/saved_resource(2).html"></iframe></ins></ins>
+	<script language="javascript" type="text/javascript">getAdminLabel();</script>
+	<script language="javascript" type="text/javascript" src="./01_files/count(2).php"> </script>
+	 	</div>
+	</div>
+</div>
+</div>
+<!-- 請將這組標籤置於 <head> 標籤之後或 </body> 標籤之前。 -->
+<script type="text/javascript" src="./01_files/plusone.js.下載" gapi_processed="true">
+  {lang: 'zh-TW'}
+</script>
+
+
+<iframe name="oauth2relay888231124" id="oauth2relay888231124" src="./01_files/postmessageRelay.html" tabindex="-1" aria-hidden="true" style="width: 1px; height: 1px; position: absolute; top: -100px;"></iframe></body></html>

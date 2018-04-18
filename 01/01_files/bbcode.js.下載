@@ -1,0 +1,437 @@
+//Based on:XMB CodeInsert (http://www.xmbforum.com)
+defmode = "normalmode";
+
+if (defmode == "advmode") {
+		helpmode = false;
+		normalmode = false;
+		advmode = true;
+} else if (defmode == "helpmode") {
+		helpmode = true;
+		normalmode = false;
+		advmode = false;
+} else {
+		helpmode = false;
+		normalmode = true;
+		advmode = false;
+}
+function chmode(swtch){
+	if (swtch == 1){
+			advmode = false;
+			normalmode = false;
+			helpmode = true;
+			alert(help_mode);
+	} else if (swtch == 0) {
+			helpmode = false;
+			normalmode = false;
+			advmode = true;
+			alert(adv_mode);
+	} else if (swtch == 2) {
+			helpmode = false;
+			advmode = false;
+			normalmode = true;
+			alert(normal_mode);
+	}
+}
+
+function AddText(NewCode) {
+	if(document.all){
+		insertAtCaret(document.input.content, NewCode);
+		setfocus();
+	} else{
+		document.input.content.value += NewCode;
+		setfocus();
+	}
+}
+
+function storeCaret (textEl){
+	if(textEl.createTextRange){
+			textEl.caretPos = document.selection.createRange().duplicate();
+	}
+}
+
+function insertAtCaret (textEl, text){
+	if (textEl.createTextRange && textEl.caretPos){
+			var caretPos = textEl.caretPos;
+			caretPos.text += caretPos.text.charAt(caretPos.text.length - 2) == ' ' ? text + ' ' : text;
+	} else if(textEl) {
+			textEl.value += text;
+	} else {
+		textEl.value = text;
+	}
+}
+
+function email() {
+        if (helpmode) {
+                alert(email_help);
+	} else if (document.selection && document.selection.type == "Text") {
+		var range = document.selection.createRange();
+		range.text = "[email]" + range.text + "[/email]";
+	} else if (advmode) {
+	      AddTxt="[email] [/email]";
+                AddText(AddTxt);
+        } else { 
+                txt2=prompt(email_normal,""); 
+                if (txt2!=null) {
+                        txt=prompt(email_normal_input,"name@domain.com");      
+                        if (txt!=null) {
+                                if (txt2=="") {
+                                        AddTxt="[email]"+txt+"[/email]";
+                
+                                } else {
+                                        AddTxt="[email="+txt+"]"+txt2+"[/email]";
+                                } 
+                                AddText(AddTxt);                
+                        }
+                }
+        }
+}
+
+
+function chsize(size) {
+        if (helpmode) {
+                alert(fontsize_help);
+	} else if (document.selection && document.selection.type == "Text") {
+		var range = document.selection.createRange();
+		range.text = "[size=" + size + "]" + range.text + "[/size]";
+        } else if (advmode) {
+                AddTxt="[size="+size+"] [/size]";
+                AddText(AddTxt);
+        } else {                       
+                txt=prompt(fontsize_normal,text_input); 
+                if (txt!=null) {             
+                        AddTxt="[size="+size+"]"+txt;
+                        AddText(AddTxt);
+                        AddText("[/size]");
+                }        
+        }
+}
+
+function chfont(font) {
+        if (helpmode){
+                alert(font_help);
+	} else if (document.selection && document.selection.type == "Text") {
+		var range = document.selection.createRange();
+		range.text = "[font=" + font + "]" + range.text + "[/font]";
+        } else if (advmode) {
+                AddTxt="[font="+font+"] [/font]";
+                AddText(AddTxt);
+        } else {                  
+                txt=prompt(font_normal,text_input);
+                if (txt!=null) {             
+                        AddTxt="[font="+font+"]"+txt;
+                        AddText(AddTxt);
+                        AddText("[/font]");
+                }        
+        }  
+}
+
+
+function bold() {
+        if (helpmode) {
+                alert(bold_help);
+	} else if (document.selection && document.selection.type == "Text") {
+		var range = document.selection.createRange();
+		range.text = "[b]" + range.text + "[/b]";
+        } else if (advmode) {
+                AddTxt="[b] [/b]";
+                AddText(AddTxt);
+        } else {  
+                txt=prompt(bold_normal,text_input);     
+                if (txt!=null) {           
+                        AddTxt="[b]"+txt;
+                        AddText(AddTxt);
+                        AddText("[/b]");
+                }       
+        }
+}
+
+function italicize() {
+        if (helpmode) {
+                alert(italicize_help);
+	} else if (document.selection && document.selection.type == "Text") {
+		var range = document.selection.createRange();
+		range.text = "[i]" + range.text + "[/i]";
+        } else if (advmode) {
+                AddTxt="[i] [/i]";
+                AddText(AddTxt);
+        } else {   
+                txt=prompt(italicize_normal,text_input);     
+                if (txt!=null) {           
+                        AddTxt="[i]"+txt;
+                        AddText(AddTxt);
+                        AddText("[/i]");
+                }               
+        }
+}
+
+function quote() {
+        if (helpmode){
+                alert(quote_help);
+	} else if (document.selection && document.selection.type == "Text") {
+		var range = document.selection.createRange();
+		range.text = "[quote]" + range.text + "[/quote]";
+        } else if (advmode) {
+                AddTxt="\r[quote]\r[/quote]";
+                AddText(AddTxt);
+        } else {   
+                txt=prompt(quote_normal,text_input);     
+                if(txt!=null) {          
+                        AddTxt="\r[quote]\r"+txt;
+                        AddText(AddTxt);
+                        AddText("\r[/quote]");
+                }               
+        }
+}
+
+function chcolor(color) {
+        if (helpmode) {
+                alert(color_help);
+	} else if (document.selection && document.selection.type == "Text") {
+		var range = document.selection.createRange();
+		range.text = "[color=" + color + "]" + range.text + "[/color]";
+        } else if (advmode) {
+                AddTxt="[color="+color+"] [/color]";
+                AddText(AddTxt);
+        } else {  
+        txt=prompt(color_normal,text_input);
+                if(txt!=null) {
+                        AddTxt="[color="+color+"]"+txt;
+                        AddText(AddTxt);
+                        AddText("[/color]");
+                }
+        }
+}
+
+function center() {
+        if (helpmode) {
+                alert(center_help);
+	} else if (document.selection && document.selection.type == "Text") {
+		var range = document.selection.createRange();
+		range.text = "[center]" + range.text + "[/center]";
+        } else if (advmode) {
+                AddTxt="[align=center] [/align]";
+                AddText(AddTxt);
+        } else {  
+                txt=prompt(center_normal,text_input);     
+                if (txt!=null) {          
+                        AddTxt="\r[align=center]"+txt;
+                        AddText(AddTxt);
+                        AddText("[/align]");
+                }              
+        }
+}
+
+function hyperlink() {
+        if (helpmode) {
+                alert(link_help);
+        } else if (advmode) {
+                AddTxt="[url] [/url]";
+                AddText(AddTxt);
+        } else { 
+                txt2=prompt(link_normal,""); 
+                if (txt2!=null) {
+                        txt=prompt(link_normal_input,"http://");      
+                        if (txt!=null) {
+                                if (txt2=="") {
+                                        AddTxt="[url]"+txt;
+                                        AddText(AddTxt);
+                                        AddText("[/url]");
+                                } else {
+                                        AddTxt="[url="+txt+"]"+txt2;
+                                        AddText(AddTxt);
+                                        AddText("[/url]");
+                                }         
+                        } 
+                }
+        }
+}
+
+function image() {
+        if (helpmode){
+                alert(image_help);
+        } else if (advmode) {
+                AddTxt="[img] [/img]";
+                AddText(AddTxt);
+        } else {  
+                txt=prompt(image_normal,"http://");    
+                if(txt!=null) {            
+                        AddTxt="\r[img]"+txt;
+                        AddText(AddTxt);
+                        AddText("[/img]");
+                }       
+        }
+}
+function addmedia(mediatype) {
+        if (helpmode){
+                alert(media_help);
+        } else if (advmode) {
+                AddTxt="["+mediatype+"=480,385] [/"+mediatype+"]";
+                AddText(AddTxt);
+        } else {  
+                txt=prompt(media_normal,"http://");
+				if(txt!=null) {  
+					var flag=txt.substr(txt.lastIndexOf(".")+1);      //根據  檔案後綴自動插入對應標簽
+					if(flag == "mp3" || flag == "wma"){
+                       		AddTxt="\r["+flag+"]"+txt;
+                       		AddText(AddTxt);
+                       		AddText("[/"+flag+"]");
+                        }else{
+							width=prompt(width_prompt,"480");
+							height=prompt(height_prompt,"385");
+							AddTxt="\r["+mediatype+"="+width+","+height+"]"+txt;
+							AddText(AddTxt);
+							AddText("[/"+mediatype+"]");
+						}
+                }       
+        }
+}
+
+function code() {
+        if (helpmode) {
+                alert(code_help);
+	} else if (document.selection && document.selection.type == "Text") {
+		var range = document.selection.createRange();
+		range.text = "[code]" + range.text + "[/code]";
+        } else if (advmode) {
+                AddTxt="\r[code]\r[/code]";
+                AddText(AddTxt);
+        } else {   
+                txt=prompt(code_normal,"");     
+                if (txt!=null) {          
+                        AddTxt="\r[code]"+txt;
+                        AddText(AddTxt);
+                        AddText("[/code]");
+                }              
+        }
+}
+
+function list() {
+        if (helpmode) {
+                alert(list_help);
+        } else if (advmode) {
+                AddTxt="\r[list][*][*][*][/list]";
+                AddText(AddTxt);
+        } else {  
+                txt=prompt(list_normal,"");
+                while ((txt!="") && (txt!="A") && (txt!="a") && (txt!="1") && (txt!=null)) {
+                        txt=prompt(list_normal_error,"");               
+                }
+                if (txt!=null) {
+                        if (txt=="") {
+                                AddTxt="\r[list]";
+                        } else {
+                                AddTxt="\r[list="+txt+"]";
+                        } 
+                        txt="1";
+                        while ((txt!="") && (txt!=null)) {
+                                txt=prompt(list_normal_input,""); 
+                                if (txt!="") {             
+                                        AddTxt+="[*]"+txt+""; 
+                                }                   
+                        } 
+                        AddTxt+="[/list]\r\n";
+                        AddText(AddTxt); 
+                }
+        }
+}
+
+function truncate() {
+	if (helpmode) {
+                alert(truncate_help);
+        } else{
+				if (document.selection && document.selection.type == "Text") {
+					var range = document.selection.createRange();
+					range.text = "[truncate]";
+				} else {   
+					AddTxt="[truncate]\n";
+					AddText(AddTxt);
+				}  
+		}
+ }
+
+function underline() {
+        if (helpmode) {
+                alert(underline_help);
+	} else if (document.selection && document.selection.type == "Text") {
+		var range = document.selection.createRange();
+		range.text = "[u]" + range.text + "[/u]";
+        } else if (advmode) {
+                AddTxt="[u] [/u]";
+                AddText(AddTxt);
+        } else {  
+                txt=prompt(underline_normal,text_input);
+                if (txt!=null) {           
+                        AddTxt="[u]"+txt;
+                        AddText(AddTxt);
+                        AddText("[/u]");
+                }               
+        }
+}
+
+function setfocus() {
+        document.input.content.focus();
+}
+
+function ctlent(obj) {
+	if((event.ctrlKey && window.event.keyCode == 13) || (event.altKey && window.event.keyCode == 83)) {
+		//if(validate(this.document.input)) 
+		//this.document.input.submit();
+		ajax_submit(obj); return false;
+	}
+}
+//林外添加的
+function check()
+{
+ if(document.input.username.value=="")
+ 	{ 
+		alert("請填你的大名！");
+		return false;
+ 	}
+ if(document.input.content.value=="")
+ 	{ 
+		alert("請填評論內容！");
+		return false;
+ 	}
+	document.input.replysubmit.disable=true;
+return true;
+}
+
+var text_input = "文字";
+var help_mode = "幫助訊息\n\n點擊相應的代碼按鈕即可獲得相應的說明和提示";
+var adv_mode = "直接插入\n\n點擊代碼按鈕後不出現提示即直接插入相應代碼";
+var normal_mode = "提示插入\n\n點擊代碼按鈕後出現嚮導視窗幫助您完成代碼插入";
+var email_help = "插入郵件地址\n\n插入郵件地址連接。\n例如︰\n[email]support@crossday.com[/email]\n[email=support@crossday.com]Dai Zhikang[/email]";
+var email_normal = "請輸入連結顯示的文字，如果留空則直接顯示郵件地址。";
+var email_normal_input = "請輸入郵件地址。";
+var fontsize_help = "設置字號\n\n將標簽所包圍的文字設置成指定字號。\n例如︰[size=3]文字大小為 3[/size]";
+var fontsize_normal = "請輸入要設置為指定字號的文字。";
+var font_help = "設定字體\n\n將標簽所包圍的文字設置成指定字體。\n例如︰[font=仿宋]字體為仿宋[/font]";
+var font_normal = "請輸入要設置成指定字體的文字。";
+var bold_help = "插入粗體文本\n\n將標簽所包圍的文本變成粗體。\n例如︰[b]www.saysay.cn[/b]";
+var bold_normal = "請輸入要設置成粗體的文字。";
+var italicize_help = "插入斜體文本\n\n將標簽所包圍的文本變成斜體。\n例如︰[i]www.saysay.cn[/i]";
+var italicize_normal = "請輸入要設置成斜體的文字。";
+var quote_help = "插入引用\n\n將標簽所包圍的文本作為引用特殊顯示。\n例如︰[quote]C-blog版權所有 - www.saysay.cn[/quote]";
+var quote_normal = "請輸入要作為引用顯示的文字。";
+var color_help = "定義文本顏色\n\n將標簽所包圍的文本變為制定顏色。\n例如︰[color=red]紅顏色[/color]";
+var color_normal = "請輸入要設置成指定顏色的文字。";
+var center_help = "居中對齊\n\n將標簽所包圍的文本居中對齊顯示。\n例如︰[align=center]內容居中[/align]";
+var center_normal = "請輸入要居中對齊的文字。";
+var link_help = "插入超級連結\n\n插入一個超級連接。\n例如︰\n[url]http://www.saysay.cn[/url]\n[url=http://www.saysay.cn][/url]";
+var link_normal = "請輸入連結顯示的文字，如果留空則直接顯示連結。";
+var link_normal_input = "請輸入 URL。";
+var image_help = "插入圖像\n\n在文本中插入一幅圖像。\n例如︰[img]http://www.saysay.cn/logo.gif[/img]";
+var image_normal = "請輸入圖像的 URL。";
+var media_help = "插入多媒體檔案,如flash,real player或media player檔案";
+var media_normal = "插入多媒體檔案,如flash,real player或media player檔案";
+var code_help = "插入代碼\n\n插入程序或腳本原始代碼。\n例如︰[code]echo\"這裡是我們的論壇\";[/code]";
+var code_normal = "請輸入要插入的代碼。";
+var list_help = "插入列表\n\n插入可由瀏覽器顯示來的規則列表項。\n例如︰\n[list]\n[*]；列表項 #1\n[*]；列表項 #2\n[*]；列表項 #3\n[/list]";
+var list_normal = "請選擇列表格式︰字母式列表輸入 \"A\"；數字式列表輸入 \"1\"。此處也可留空。";
+var list_normal_error = "錯誤︰列表格式只能選擇輸入 \"A\" 或 \"1\"。";
+var list_normal_input = "請輸入列表項目內容，如果留空表示項目結束。";
+var underline_help = "插入下劃線\n\n給標簽所包圍的文本加上下劃線。\n例如︰[u]php blog[/u]";
+var underline_normal = "請輸入要加下劃線的文字。";
+var truncate_help = "在需要截斷日誌的地方插入[truncate]標記,作為顯示在首頁列表的文摘內容";
+var width_prompt="該多媒體的高度";
+var height_prompt="該多媒體的寬度";
